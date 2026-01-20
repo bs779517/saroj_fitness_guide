@@ -40,7 +40,7 @@
         
         /* Gradient Text */
         .text-gradient {
-            background: linear-gradient(to right, #059669, #10b981);
+            background: linear-gradient(to right, #34d399, #10b981);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -180,24 +180,32 @@
                         </div>
                     </nav>
 
-                    {/* Hero Section */}
+                    {/* Hero Section WITH YOGA BACKGROUND */}
                     <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden">
+                        
+                        {/* Background Image & Overlay */}
+                        <div className="absolute inset-0 z-0">
+                            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop" alt="Yoga Background" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-slate-900/70"></div> {/* Dark Overlay for contrast */}
+                        </div>
+
                         <div className="max-w-7xl mx-auto text-center relative z-10 fade-in-up" style={{animationDelay: '0.1s'}}>
-                            <span className="inline-block py-1.5 px-4 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs uppercase tracking-widest mb-6 border border-emerald-200 shadow-sm">
+                            <span className="inline-block py-1.5 px-4 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs uppercase tracking-widest mb-6 border border-emerald-500/30 shadow-sm">
                               🏆 Certified Coach & Ayurveda Expert
                             </span>
-                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 mb-6 leading-tight">
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
                                 Train Like a <br/><span className="text-gradient">Champion</span>
                             </h1>
-                            <p className="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+                            <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
                               Expert Weight Loss Coaching, Online Yoga & Authentic Ayurvedic Supplements guide by Saroj.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                               <a href="https://wa.me/919217225060" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-xl font-bold hover:shadow-xl hover:-translate-y-1 transition-all">
                                 <i className="fa-brands fa-whatsapp text-2xl"></i> Chat on WhatsApp
                               </a>
-                              <a href="https://instagram.com/saroj_fitness_guide" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white text-slate-800 border border-slate-200 px-8 py-4 rounded-xl font-bold hover:shadow-xl hover:-translate-y-1 transition-all">
-                                <i className="fa-brands fa-instagram text-2xl text-pink-600"></i> Instagram
+                              {/* Glassmorphic Instagram Button for dark background */}
+                              <a href="https://instagram.com/saroj_fitness_guide" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all">
+                                <i className="fa-brands fa-instagram text-2xl text-pink-400"></i> Instagram
                               </a>
                             </div>
                         </div>
@@ -346,7 +354,7 @@
                             <h2 className="text-3xl font-bold text-center mb-12">Success Stories</h2>
                             <div className="grid md:grid-cols-3 gap-8">
                                 {testimonials.map((t, i) => (
-                                    <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                                    <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover-lift">
                                         <div className="text-yellow-400 text-sm mb-4">
                                             {[...Array(t.star)].map((_,s)=><i key={s} className="fa-solid fa-star"></i>)}
                                         </div>
