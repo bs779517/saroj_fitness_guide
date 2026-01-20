@@ -13,11 +13,13 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         body { font-family: 'Open Sans', sans-serif; background-color: #f3f4f6; }
-        h1, h2, h3, h4, h5, h6, button, .nav-link { font-family: 'Poppins', sans-serif; }
+        
+        /* Changed Headings to Montserrat for Premium Feel */
+        h1, h2, h3, h4, h5, h6, button, .nav-link, .premium-font { font-family: 'Montserrat', sans-serif; }
 
         /* Smooth Scrollbar */
         .scroll-hide::-webkit-scrollbar { display: none; }
@@ -29,9 +31,9 @@
 
         /* Glass Effect */
         .glass {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* Hover Effects */
@@ -163,49 +165,53 @@
             return (
                 <div className="min-h-screen selection:bg-emerald-200">
                     
-                    {/* Navigation - Glassmorphism */}
+                    {/* Navigation */}
                     <nav className="fixed w-full z-50 glass top-0 left-0">
                         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                            <div className="text-2xl font-extrabold tracking-tight text-slate-800">
-                                Saroj<span className="text-emerald-600">Fit</span>.
+                            <div className="text-2xl font-black tracking-tight text-slate-900">
+                                SAROJ<span className="text-emerald-600">FIT</span>.
                             </div>
-                            <div className="hidden md:flex space-x-8 font-semibold text-slate-600 text-sm uppercase tracking-wider">
+                            <div className="hidden md:flex space-x-8 font-bold text-slate-600 text-xs uppercase tracking-widest">
                                 <a href="#services" className="hover:text-emerald-600 transition">Services</a>
                                 <a href="#gallery" className="hover:text-emerald-600 transition">Gallery</a>
                                 <a href="#store" className="hover:text-emerald-600 transition">Store</a>
                             </div>
-                            <a href="#contact" className="bg-emerald-600 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-700 transition shadow-lg shadow-emerald-200">
+                            <a href="#contact" className="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-600 transition shadow-lg">
                                 Contact Me
                             </a>
                         </div>
                     </nav>
 
                     {/* Hero Section WITH YOGA BACKGROUND */}
-                    <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden">
+                    <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center">
                         
                         {/* Background Image & Overlay */}
                         <div className="absolute inset-0 z-0">
                             <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop" alt="Yoga Background" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-slate-900/70"></div> {/* Dark Overlay for contrast */}
+                            <div className="absolute inset-0 bg-black/60"></div> {/* Darker Overlay for Premium Text Contrast */}
                         </div>
 
                         <div className="max-w-7xl mx-auto text-center relative z-10 fade-in-up" style={{animationDelay: '0.1s'}}>
-                            <span className="inline-block py-1.5 px-4 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs uppercase tracking-widest mb-6 border border-emerald-500/30 shadow-sm">
+                            <span className="inline-block py-2 px-5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 font-bold text-xs uppercase tracking-[0.2em] mb-8 border border-white/20">
                               🏆 Certified Coach & Ayurveda Expert
                             </span>
-                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
-                                Train Like a <br/><span className="text-gradient">Champion</span>
+                            
+                            {/* UPDATED HEADER: Smaller, Premium Font */}
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-snug tracking-wide uppercase">
+                                Train Like a <br/>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">Champion</span>
                             </h1>
-                            <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                            
+                            <p className="text-base md:text-lg text-slate-200 mb-10 max-w-xl mx-auto leading-relaxed font-light">
                               Expert Weight Loss Coaching, Online Yoga & Authentic Ayurvedic Supplements guide by Saroj.
                             </p>
+                            
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                              <a href="https://wa.me/919217225060" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-xl font-bold hover:shadow-xl hover:-translate-y-1 transition-all">
-                                <i className="fa-brands fa-whatsapp text-2xl"></i> Chat on WhatsApp
+                              <a href="https://wa.me/919217225060" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-emerald-500 text-white px-8 py-4 rounded-full font-bold tracking-wide hover:shadow-emerald-500/40 hover:shadow-xl hover:-translate-y-1 transition-all uppercase text-sm">
+                                <i className="fa-brands fa-whatsapp text-xl"></i> Chat on WhatsApp
                               </a>
-                              {/* Glassmorphic Instagram Button for dark background */}
-                              <a href="https://instagram.com/saroj_fitness_guide" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all">
-                                <i className="fa-brands fa-instagram text-2xl text-pink-400"></i> Instagram
+                              <a href="https://instagram.com/saroj_fitness_guide" target="_blank" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-full font-bold tracking-wide hover:bg-white/20 transition-all uppercase text-sm">
+                                <i className="fa-brands fa-instagram text-xl"></i> Instagram
                               </a>
                             </div>
                         </div>
