@@ -57,9 +57,8 @@
             font-weight: 500;
         }
 
-        /* --- Hero Section (UPDATED BACKGROUND) --- */
+        /* --- Hero Section --- */
         .hero {
-            /* यहाँ मैंने योगा की एक स्पेसिफिक फोटो का लिंक डाला है */
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1600&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -92,97 +91,108 @@
         }
         .btn:hover { background: #e65100; }
 
-        .btn-insta {
-            background: #E1306C; /* Instagram Color */
-        }
-        .btn-insta:hover { background: #C13584; }
-
-        .btn-whatsapp {
-            background: #25D366; /* WhatsApp Color */
-        }
-        .btn-whatsapp:hover { background: #128C7E; }
+        .btn-insta { background: #E1306C; }
+        .btn-whatsapp { background: #25D366; }
 
         /* --- Common Section Styles --- */
         .section { padding: 60px 20px; text-align: center; }
-        .section h2 { margin-bottom: 40px; color: #2e7d32; font-size: 2rem; }
+        .section h2 { margin-bottom: 10px; color: #2e7d32; font-size: 2rem; }
+        .sub-heading { margin-bottom: 40px; color: #666; }
 
-        /* --- Services --- */
-        .services-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            width: 300px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            border-top: 4px solid #2e7d32;
-        }
-        .card:hover { transform: translateY(-5px); }
-        .card h3 { margin-bottom: 15px; color: #333; }
-
-        /* --- Pricing Section --- */
-        .pricing-section { background-color: #fff; }
-        
-        .price-card {
-            background: #f4f4f4;
-            padding: 30px;
-            width: 300px;
-            border-radius: 10px;
+        /* --- Draggable Slider Section (NEW) --- */
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
             position: relative;
-        }
-        
-        .price-card.featured {
-            background: #e8f5e9;
-            border: 2px solid #2e7d32;
-            transform: scale(1.05);
+            padding: 20px 0;
+            cursor: grab;
         }
 
-        .price-amount {
-            font-size: 2rem;
-            color: #2e7d32;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .features-list {
-            list-style: none;
-            margin: 20px 0;
-            text-align: left;
-        }
-        
-        .features-list li {
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #ddd;
+        .slider-track {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 20px 50px; /* Side padding so first item isn't stuck to edge */
+            -ms-overflow-style: none;  /* Hide scrollbar IE and Edge */
+            scrollbar-width: none;  /* Hide scrollbar Firefox */
         }
 
-        /* --- Ayurveda Section --- */
-        .ayurveda-section { background-color: #e8f5e9; }
-        .product-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .slider-track::-webkit-scrollbar {
+            display: none;
+        }
+
         .product-card {
+            min-width: 280px;
+            max-width: 280px;
             background: white;
-            border-radius: 8px;
-            width: 250px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border: 1px solid #e0e0e0;
+            flex-shrink: 0; /* Prevent shrinking */
+            user-select: none; /* Prevent text selection while dragging */
         }
-        
-        .product-price { color: #2e7d32; font-weight: bold; font-size: 1.1rem; display: block; margin: 10px 0; }
 
-        /* --- Footer --- */
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-card h3 {
+            color: #2e7d32;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            height: 50px; /* Fixed height for alignment */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-uses {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 15px;
+            height: 60px; /* Fixed height for uniform look */
+            overflow: hidden;
+        }
+
+        .product-price {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .drag-hint {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: -30px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* --- Contact --- */
+        .contact-box {
+            margin-top: 30px; 
+            background: white; 
+            padding: 20px; 
+            display: inline-block; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
         footer { background: #333; color: white; text-align: center; padding: 20px; margin-top: auto; }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
-            .price-card.featured { transform: scale(1); }
             nav ul { display: none; }
         }
     </style>
@@ -194,8 +204,8 @@
             <div class="logo">Saroj Fitness Guide</div>
             <ul>
                 <li><a href="#services">Services</a></li>
+                <li><a href="#supplements">Supplements</a></li>
                 <li><a href="#pricing">Plans</a></li>
-                <li><a href="#ayurveda">Supplements</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -203,102 +213,120 @@
 
     <section class="hero">
         <h1>Welcome to Saroj Fitness Guide</h1>
-        <p>वजन घटाएं, फिट रहें और योग के साथ स्वस्थ जीवन जिएं। एक्सपर्ट गाइडेंस और आयुर्वेदिक सप्लीमेंट्स।</p>
+        <p>प्रोफेशनल एथलीट के साथ ट्रेनिंग करें और नेचुरल सप्लीमेंट्स से फिट रहें।</p>
         <div>
             <a href="https://wa.me/919217225060" class="btn btn-whatsapp">WhatsApp Chat</a>
             <a href="https://instagram.com/saroj_fitness_guide" target="_blank" class="btn btn-insta">Instagram</a>
         </div>
     </section>
 
+    <section id="supplements" class="section" style="background-color: #e8f5e9;">
+        <h2>My Recommended Supplements</h2>
+        <p class="sub-heading">Vestige Prime & Ayurvedic Range</p>
+        
+        <div class="drag-hint">
+            <span>👈</span> अपनी उंगली या माउस से खींचें (Drag to Scroll) <span>👉</span>
+        </div>
+
+        <div class="slider-container" id="sliderContainer">
+            <div class="slider-track" id="sliderTrack">
+                
+                <div class="product-card">
+                    <h3>Vestige Spirulina</h3>
+                    <p class="product-uses">इम्यूनिटी बढ़ाए, थकान दूर करे और शरीर को डिटॉक्स करे। (Superfood)</p>
+                    <span class="product-price">₹503</span>
+                    <a href="https://wa.me/919217225060?text=Order Vestige Spirulina" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Vestige Flax Oil</h3>
+                    <p class="product-uses">हार्ट हेल्थ और कोलेस्ट्रॉल कंट्रोल के लिए ओमेगा-3 का स्रोत।</p>
+                    <span class="product-price">₹756</span>
+                    <a href="https://wa.me/919217225060?text=Order Flax Oil" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Vestige Noni</h3>
+                    <p class="product-uses">सांस की तकलीफ और मेटाबॉलिज्म सुधारने में असरदार।</p>
+                    <span class="product-price">₹701</span>
+                    <a href="https://wa.me/919217225060?text=Order Noni Capsules" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Veslim Shake</h3>
+                    <p class="product-uses">वजन कम करने के लिए स्वादिष्ट मैंगो/वनीला शेक। (Meal Replacement)</p>
+                    <span class="product-price">₹2327</span>
+                    <a href="https://wa.me/919217225060?text=Order Veslim Shake" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Vestige Calcium</h3>
+                    <p class="product-uses">मजबूत हड्डियों और दांतों के लिए कैल्शियम और विटामिन D3।</p>
+                    <span class="product-price">₹314</span>
+                    <a href="https://wa.me/919217225060?text=Order Calcium" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Ayusante Liverhealth</h3>
+                    <p class="product-uses">लीवर को मजबूत करने और पाचन सुधारने के लिए।</p>
+                    <span class="product-price">₹867</span>
+                    <a href="https://wa.me/919217225060?text=Order Liverhealth" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Vestige Aloe Vera</h3>
+                    <p class="product-uses">पाचन, एसिडिटी और त्वचा की चमक के लिए।</p>
+                    <span class="product-price">₹384</span>
+                    <a href="https://wa.me/919217225060?text=Order Aloe Vera" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Vestige Glucosamine</h3>
+                    <p class="product-uses">जोड़ों के दर्द और घुटनों की समस्या में राहत के लिए।</p>
+                    <span class="product-price">₹1019</span>
+                    <a href="https://wa.me/919217225060?text=Order Glucosamine" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Vestige Amla</h3>
+                    <p class="product-uses">विटामिन C का स्रोत, बालों और इम्युनिटी के लिए बेस्ट।</p>
+                    <span class="product-price">₹244</span>
+                    <a href="https://wa.me/919217225060?text=Order Amla" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+                <div class="product-card">
+                    <h3>Sea Buckthorn</h3>
+                    <p class="product-uses">हाई एनर्जी और स्टेमिना के लिए (Active Life)।</p>
+                    <span class="product-price">₹1069</span>
+                    <a href="https://wa.me/919217225060?text=Order Sea Buckthorn" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order Now</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <section id="services" class="section">
         <h2>My Services</h2>
-        <div class="services-container">
-            <div class="card">
-                <h3>🧘‍♀️ Online Yoga Class</h3>
-                <p>रोजाना सुबह और शाम लाइव योग सेशंस। मन और शरीर की शांति के लिए।</p>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+            <div class="product-card" style="border-top:4px solid #ff9800;">
+                <h3>Online Yoga</h3>
+                <p>Morning & Evening Batches available.</p>
             </div>
-            <div class="card">
-                <h3>🔥 Weight Loss Program</h3>
-                <p>स्पेशल फैट लॉस वर्कआउट और डाइट प्लान जो आपको फिट बनाएगा।</p>
-            </div>
-            <div class="card">
-                <h3>🌿 Ayurvedic Supplements</h3>
-                <p>100% नेचुरल आयुर्वेदिक प्रोडक्ट्स और सप्लीमेंट्स।</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="pricing" class="section pricing-section">
-        <h2>Class Packages</h2>
-        <p>अपनी जरूरत के हिसाब से प्लान चुनें</p>
-        <br>
-        <div class="services-container">
-            <div class="price-card">
-                <h3>Yoga Batch</h3>
-                <div class="price-amount">₹999 <span style="font-size:1rem; color:#666;">/ month</span></div>
-                <ul class="features-list">
-                    <li>✅ Daily Live Yoga (1 Hour)</li>
-                    <li>✅ Morning/Evening Batch</li>
-                    <li>✅ Basic Diet Tips</li>
-                </ul>
-                <a href="https://wa.me/919217225060?text=I want to join Yoga Batch" class="btn" style="background:#555; font-size:0.9rem;">Join Now</a>
-            </div>
-
-            <div class="price-card featured">
-                <div style="background:#ff9800; color:white; padding:5px; border-radius:5px; margin-bottom:10px; font-size:0.8rem; display:inline-block;">BEST SELLER</div>
-                <h3>Weight Loss Pro</h3>
-                <div class="price-amount">₹2499 <span style="font-size:1rem; color:#666;">/ month</span></div>
-                <ul class="features-list">
-                    <li>✅ Daily Workout + Yoga</li>
-                    <li>✅ Custom Diet Chart</li>
-                    <li>✅ Weekly Progress Check</li>
-                </ul>
-                <a href="https://wa.me/919217225060?text=I want to join Weight Loss Pro" class="btn">Join Now</a>
-            </div>
-
-            <div class="price-card">
-                <h3>Personal Coaching</h3>
-                <div class="price-amount">₹4999 <span style="font-size:1rem; color:#666;">/ month</span></div>
-                <ul class="features-list">
-                    <li>✅ 1-on-1 Video Training</li>
-                    <li>✅ Full Ayurveda Support</li>
-                    <li>✅ 24/7 WhatsApp Support</li>
-                </ul>
-                <a href="https://wa.me/919217225060?text=I want Personal Coaching" class="btn" style="background:#555; font-size:0.9rem;">Join Now</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="ayurveda" class="section ayurveda-section">
-        <h2>Ayurvedic Store</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <h3>Fat Burner Tea</h3>
-                <span class="product-price">₹499</span>
-                <a href="https://wa.me/919217225060?text=Order Fat Burner Tea" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order on WhatsApp</a>
-            </div>
-            <div class="product-card">
-                <h3>Energy Booster</h3>
-                <span class="product-price">₹899</span>
-                <a href="https://wa.me/919217225060?text=Order Energy Booster" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order on WhatsApp</a>
-            </div>
-            <div class="product-card">
-                <h3>Detox Juice</h3>
-                <span class="product-price">₹350</span>
-                <a href="https://wa.me/919217225060?text=Order Detox Juice" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Order on WhatsApp</a>
+            <div class="product-card" style="border-top:4px solid #ff9800;">
+                <h3>Weight Loss</h3>
+                <p>Diet + Workout Plans for results.</p>
             </div>
         </div>
     </section>
 
     <section id="contact" class="section">
         <h2>Contact Me</h2>
-        <p>क्लास जॉइन करने के लिए संपर्क करें</p>
-        <div style="margin-top: 30px; background: white; padding: 20px; display: inline-block; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div class="contact-box">
             <p style="font-size:1.2rem; margin-bottom:10px;">
                 📞 <strong>Call:</strong> <a href="tel:+919217225060" style="text-decoration:none; color:#333;">+91-9217225060</a>
             </p>
             <p style="font-size:1.2rem; margin-bottom:10px;">
-                📧 <strong>Email:</strong> <a href="mailto:saroj.shila60@gmail.com" style="text-decoration:none; color:#333;">saroj.shila60@gmail.com</a>
+                📧 <strong>Email:</strong> saroj.shila60@gmail.com
             </p>
             <p style="font-size:1.2rem;">
                 📸 <strong>Instagram:</strong> <a href="https://instagram.com/saroj_fitness_guide" target="_blank" style="text-decoration:none; color:#E1306C; font-weight:bold;">@saroj_fitness_guide</a>
@@ -309,6 +337,38 @@
     <footer>
         <p>&copy; 2026 Saroj Fitness Guide. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        const slider = document.querySelector('.slider-track');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.style.cursor = 'grabbing';
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.style.cursor = 'grab';
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.style.cursor = 'grab';
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2; // Scroll-fast speed
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    </script>
 
 </body>
 </html>
