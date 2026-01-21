@@ -6,49 +6,22 @@
     <title>Saroj Fitness & Ayurveda Guide</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         body { font-family: 'Open Sans', sans-serif; background-color: #f8fafc; }
-        
-        /* Premium Fonts */
-        h1, h2, h3, h4, h5, h6, button, .nav-link, .premium-font { font-family: 'Montserrat', sans-serif; }
-
-        /* Custom Utilities */
+        h1, h2, h3, h4, h5, h6, button, .nav-link { font-family: 'Montserrat', sans-serif; }
         .scroll-hide::-webkit-scrollbar { display: none; }
         .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .hover-lift { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
         .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
-        
-        .text-gradient {
-            background: linear-gradient(to right, #34d399, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #10b981;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
+        .text-gradient { background: linear-gradient(to right, #34d399, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #10b981; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -59,10 +32,8 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- AIRTABLE CONFIGURATION ---
-        const AIRTABLE_API_TOKEN = 'patZtUqm9uPbQhOCV.d2639e456fcd2d3a9ec9447a1ccd20c4bbfb1935ee937dfe9ecd0a914ce7e600'; 
-        const AIRTABLE_BASE_ID = 'app3RO5wQWdO3qA1v'; 
-        const AIRTABLE_TABLE_NAME = 'Table 1';
+        // --- SHEETDB CONFIGURATION ---
+        const SHEETDB_URL = 'https://sheetdb.io/api/v1/fi4eegqr9v38e'; 
 
         // --- DATA ---
         const supplements = [
@@ -86,7 +57,7 @@
             { q: "Supplements order karne par kab milenge?", a: "3-5 working days mein home delivery ho jayegi." }
         ];
 
-        // --- COMPONENT: AI DIET PLANNER (AUTO SAVE) ---
+        // --- COMPONENT: AI DIET PLANNER (GOOGLE SHEETS INTEGRATED) ---
         const DietPlanner = () => {
             const [step, setStep] = useState(1);
             const [loading, setLoading] = useState(false);
@@ -98,7 +69,7 @@
             };
 
             const generateAndSave = async () => {
-                // 1. Validation
+                // 1. Check if all fields are filled
                 if(!formData.name || !formData.weight || !formData.height || !formData.phone) {
                     alert("Please fill all details!");
                     return;
@@ -106,7 +77,7 @@
                 
                 setLoading(true);
 
-                // 2. Prepare the Diet Plan (Local Logic)
+                // 2. Prepare Diet Plan (Logic)
                 let diet = {};
                 if(formData.goal === 'Weight Loss') {
                     diet = {
@@ -126,43 +97,40 @@
                     };
                 }
 
-                // 3. Save to Airtable (Background Process)
-                const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`;
-                const airtableData = {
-                    "fields": {
-                        "Name": formData.name,
-                        "Phone": formData.phone,
-                        "Weight": parseInt(formData.weight) || 0,
-                        "Height": parseInt(formData.height) || 0,
-                        "Goal": formData.goal,
-                        "DietType": formData.type
-                    },
-                    "typecast": true 
+                // 3. Save to Google Sheets via SheetDB
+                const dataToSend = {
+                    data: [
+                        {
+                            date: new Date().toLocaleDateString(),
+                            name: formData.name,
+                            phone: formData.phone,
+                            weight: formData.weight,
+                            height: formData.height,
+                            goal: formData.goal,
+                            type: formData.type
+                        }
+                    ]
                 };
 
                 try {
-                    // We allow 2 seconds for visual effect, then show result
-                    setTimeout(async () => {
-                        setPlan(diet);
-                        setLoading(false);
-                        setStep(2);
-                        
-                        // Fire and forget fetch request
-                        await fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${AIRTABLE_API_TOKEN}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(airtableData)
-                        });
-                    }, 2000);
-                    
+                    await fetch(SHEETDB_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(dataToSend)
+                    });
+                    // Successfully sent to Google Sheet
                 } catch (error) {
-                    console.error("Data Save Failed", error);
-                    setLoading(false);
-                    setStep(2); // Still show plan even if save fails
+                    console.error("SheetDB Error", error);
+                    // We continue to show the plan even if saving fails
                 }
+
+                // 4. Show Plan
+                setPlan(diet);
+                setLoading(false);
+                setStep(2);
             };
 
             const resetForm = () => {
@@ -177,7 +145,7 @@
                     <div className="text-center mb-8">
                         <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Instant Access</span>
                         <h2 className="text-3xl font-bold mt-2 text-slate-800">AI Smart Diet Planner 🤖</h2>
-                        <p className="text-slate-500 text-sm">Generate Plan & Save to Profile instantly</p>
+                        <p className="text-slate-500 text-sm">Generate Plan & Save to Google Sheets</p>
                     </div>
 
                     {step === 1 && (
@@ -204,9 +172,9 @@
                             </div>
                             
                             <button onClick={generateAndSave} disabled={loading} className="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-emerald-600 transition flex justify-center items-center gap-2">
-                                {loading ? <div className="loader"></div> : <>Generate My Plan <i className="fa-solid fa-wand-magic-sparkles"></i></>}
+                                {loading ? <div className="loader"></div> : <>Generate & Save Plan <i className="fa-solid fa-wand-magic-sparkles"></i></>}
                             </button>
-                            <p className="text-[10px] text-center text-slate-400">By clicking generate, your details will be saved to our database.</p>
+                            <p className="text-[10px] text-center text-slate-400">Details will be saved to your Google Sheet.</p>
                         </div>
                     )}
 
@@ -214,7 +182,7 @@
                         <div className="fade-in-up">
                             <div className="flex items-center gap-2 mb-4 text-emerald-600 bg-emerald-50 p-3 rounded-lg border border-emerald-100">
                                 <i className="fa-solid fa-check-circle text-xl"></i>
-                                <span className="font-bold text-sm">Success! Plan generated & saved to database.</span>
+                                <span className="font-bold text-sm">Success! Data saved to Google Sheet.</span>
                             </div>
 
                             <div className="bg-white p-6 rounded-2xl mb-6 border border-slate-200 shadow-sm">
@@ -230,7 +198,7 @@
                             
                             <div className="flex gap-3">
                                 <button onClick={resetForm} className="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200">Create New</button>
-                                <a href="https://wa.me/919217225060?text=Hello Saroj, I just generated a diet plan on your website. Can you guide me more?" target="_blank" className="flex-1 bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-green-600 shadow-lg flex items-center justify-center gap-2">
+                                <a href="https://wa.me/919217225060?text=Hello Saroj, I just generated a diet plan on your website." target="_blank" className="flex-1 bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-green-600 shadow-lg flex items-center justify-center gap-2">
                                     Chat on WhatsApp <i className="fa-brands fa-whatsapp"></i>
                                 </a>
                             </div>
@@ -379,7 +347,7 @@
                         </div>
                     </nav>
 
-                    {/* Hero Section */}
+                    {/* Hero Section WITH YOGA BACKGROUND */}
                     <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center">
                         <div className="absolute inset-0 z-0">
                             <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop" alt="Yoga Background" className="w-full h-full object-cover" />
@@ -463,19 +431,6 @@
                                 {/* Right: BMI Calculator */}
                                 <div className="lg:mt-24">
                                     <BMICalculator />
-                                    
-                                    {/* Mini FAQ */}
-                                    <div className="mt-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-                                        <h3 className="font-bold text-slate-800 mb-4">Quick Questions</h3>
-                                        {faqs.map((f, i) => (
-                                            <div key={i} className="mb-3 last:mb-0 border-b last:border-0 border-slate-100 pb-3 last:pb-0">
-                                                <div onClick={() => setOpenFaq(openFaq === i ? null : i)} className="font-semibold text-sm cursor-pointer flex justify-between text-slate-700 hover:text-emerald-600">
-                                                    {f.q} <span>{openFaq === i ? '-' : '+'}</span>
-                                                </div>
-                                                {openFaq === i && <p className="text-xs text-slate-500 mt-2">{f.a}</p>}
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -532,7 +487,7 @@
                                         <p className="text-slate-500 text-sm mb-4 h-10 overflow-hidden">{item.use}</p>
                                         <div className="mt-auto w-full">
                                             <p className="text-2xl font-bold text-slate-900 mb-4">{item.price}</p>
-                                            <a href={`https://wa.me/919217225060?text=I want to order ${item.name}`} className="block w-full bg-slate-900 text-white py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-emerald-600 transition">Order Now</a>
+                                            <a href={`https://wa.me/919217225060?text=I want to order ${item.name}`} className="block w-full bg-slate-900 text-white py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition">Order Now</a>
                                         </div>
                                     </div>
                                 ))}
