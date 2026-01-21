@@ -45,15 +45,9 @@
         ];
 
         const testimonials = [
-            { name: "Priya Sharma", result: "Lost 8kg in 2 Months", text: "Saroj Ma'am ki diet aur yoga ne meri life badal di. Amazing coaching!", star: 5 },
-            { name: "Rahul Verma", result: "Fit & Active Lifestyle", text: "Ma'am ka diet plan follow karke main ab pure din active rehta hun.", star: 5 },
-            { name: "Sunita Devi", result: "Joint Pain Relief", text: "Glucosamine aur Yoga se mere ghutno ka dard gayab ho gaya.", star: 5 }
-        ];
-
-        const faqs = [
-            { q: "Kya online class mein camera on rakhna zaruri hai?", a: "Nahi, par posture correction ke liye on rakhna behtar hai." },
-            { q: "Weight Loss plan mein kya khana hoga?", a: "Ghar ka bana simple khana. Hum starvation diet nahi dete." },
-            { q: "Supplements order karne par kab milenge?", a: "3-5 working days mein home delivery ho jayegi." }
+            { name: "Priya Sharma", result: "Lost 8kg in 2 Months", text: "Saroj Ma'am ki diet aur yoga ne meri life badal di. Ab main pehle se zyada active feel karti hun.", star: 5 },
+            { name: "Rahul Verma", result: "Sprint Speed Improved", text: "Main state level athlete hun. Ma'am ki techniques aur diet chart se meri speed badh gayi hai.", star: 5 },
+            { name: "Sunita Devi", result: "Joint Pain Relief", text: "Glucosamine aur Yoga se mere ghutno ka dard gayab ho gaya. Thank you Saroj ji.", star: 5 }
         ];
 
         // --- COMPONENT: AI DIET PLANNER (DARK THEME) ---
@@ -72,10 +66,8 @@
                     alert("Please fill all details!");
                     return;
                 }
-                
                 setLoading(true);
 
-                // 1. Detailed Diet Logic
                 let diet = {};
                 if(formData.goal === 'Weight Loss') {
                     diet = {
@@ -103,7 +95,6 @@
                     };
                 }
 
-                // 2. Save to Google Sheets
                 const dataToSend = {
                     data: [{
                         date: new Date().toLocaleDateString(),
@@ -139,13 +130,11 @@
             return (
                 <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-2xl border border-slate-700 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-blue-500"></div>
-                    
                     <div className="text-center mb-8">
                         <span className="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full uppercase border border-emerald-500/30">Instant Access</span>
                         <h2 className="text-3xl font-bold mt-2 text-white">AI Smart Diet Planner 🤖</h2>
                         <p className="text-slate-400 text-sm">Generate detailed plan & save to profile</p>
                     </div>
-
                     {step === 1 && (
                         <div className="space-y-4 fade-in-up">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -168,13 +157,11 @@
                                     <option value="Vegan">Vegan</option>
                                 </select>
                             </div>
-                            
                             <button onClick={generateAndSave} disabled={loading} className="w-full bg-gradient-to-r from-emerald-500 to-green-400 hover:from-emerald-600 hover:to-green-500 text-white font-bold py-4 rounded-xl transition flex justify-center items-center gap-2">
                                 {loading ? <div className="loader"></div> : <>Generate & Save Plan <i className="fa-solid fa-wand-magic-sparkles"></i></>}
                             </button>
                         </div>
                     )}
-
                     {step === 2 && plan && (
                         <div className="fade-in-up">
                             <div className="bg-slate-800 p-6 rounded-2xl mb-6 border border-slate-700">
@@ -187,7 +174,6 @@
                                     <li className="flex flex-col"><span className="font-bold text-emerald-500 uppercase text-xs tracking-wider">Dinner</span> {plan.dinner}</li>
                                 </ul>
                             </div>
-                            
                             <div className="bg-slate-800/50 rounded-2xl p-6 text-center text-white mb-6 border border-emerald-500/30">
                                 <h4 className="text-xl font-bold text-emerald-400 mb-2">Want 100% Results? 🔥</h4>
                                 <p className="text-sm text-slate-400 mb-4">This is a basic AI plan. For a personalized diet chart, workout video & daily tracking, connect with Coach Saroj now.</p>
@@ -195,7 +181,6 @@
                                     <i className="fa-brands fa-whatsapp text-xl"></i> Chat with Coach Saroj
                                 </a>
                             </div>
-
                             <button onClick={resetForm} className="w-full text-slate-500 text-xs hover:text-slate-300">Create Another Plan</button>
                         </div>
                     )}
@@ -221,13 +206,11 @@
                 const val = (parseFloat(details.weight) / (h * h)).toFixed(1);
                 setBmi(val);
 
-                // Alert Logic
                 if(val < 18.5) { setCategory('Underweight'); setShowAlert(true); } 
                 else if(val < 25) { setCategory('Normal'); setShowAlert(false); } 
                 else if(val < 30) { setCategory('Overweight'); setShowAlert(true); } 
                 else { setCategory('Obese'); setShowAlert(true); }
 
-                // Meter Needle Calculation
                 let visualBMI = val < 15 ? 15 : (val > 40 ? 40 : val);
                 const rotation = -90 + ((visualBMI - 15) * (180 / 25));
                 setAngle(rotation);
@@ -236,12 +219,10 @@
             return (
                 <div className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden fade-in-up">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                    
                     <div className="relative z-10 text-center mb-8">
                         <h2 className="text-3xl md:text-4xl font-bold mb-2">BMI Calculator</h2>
                         <p className="text-slate-400">Check your health score</p>
                     </div>
-
                     <div className="relative z-10">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <input name="name" onChange={handleChange} placeholder="Your Name" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none" />
@@ -255,12 +236,9 @@
                                 <option value="Female">Female</option>
                             </select>
                         </div>
-
                         <button onClick={calculate} className="w-full bg-gradient-to-r from-emerald-500 to-green-400 hover:from-emerald-600 hover:to-green-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all mb-8">
                             Check Result
                         </button>
-
-                        {/* METER & RESULT */}
                         <div className="flex flex-col items-center">
                              <div className="relative w-64 h-32 overflow-hidden mb-6">
                                 <div className="w-64 h-32 rounded-t-full bg-gradient-to-r from-yellow-400 via-green-500 to-red-500 opacity-90"></div>
@@ -269,7 +247,6 @@
                                      style={{ marginLeft: '-2px', transform: `rotate(${angle}deg)` }}></div>
                                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full z-30 shadow-md"></div>
                              </div>
-                             
                              <div className="text-center">
                                <div className="text-5xl font-black text-white mb-2">{bmi || "--.-"}</div>
                                <div className={`px-6 py-1 rounded-full inline-block font-bold uppercase text-sm tracking-wide ${ 
@@ -279,8 +256,6 @@
                                  {category || "Enter Details"}
                                </div>
                              </div>
-
-                             {/* SMART ALERT */}
                              {showAlert && (
                                 <div className="mt-6 bg-red-500/10 border border-red-500/40 rounded-2xl p-4 text-left w-full">
                                     <div className="flex items-start gap-3">
@@ -340,7 +315,9 @@
         // --- MAIN APP ---
         const App = () => {
             const [openFaq, setOpenFaq] = useState(null);
-            
+            const scrollRef = useRef(null);
+            const scroll = (offset) => { if(scrollRef.current) scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' }); };
+
             return (
                 <div className="min-h-screen selection:bg-emerald-200">
                     
@@ -355,9 +332,7 @@
                                 <a href="#planner" className="hover:text-emerald-600 transition">AI Planner</a>
                                 <a href="#store" className="hover:text-emerald-600 transition">Store</a>
                             </div>
-                            <a href="#contact" className="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-600 transition shadow-lg">
-                                Contact Me
-                            </a>
+                            <a href="#contact" className="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-600 transition shadow-lg">Contact Me</a>
                         </div>
                     </nav>
 
@@ -367,56 +342,25 @@
                             <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop" alt="Yoga Background" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-black/60"></div>
                         </div>
-
-                        <div className="max-w-7xl mx-auto text-center relative z-10 fade-in-up" style={{animationDelay: '0.1s'}}>
-                            <span className="inline-block py-2 px-5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 font-bold text-xs uppercase tracking-[0.2em] mb-8 border border-white/20">
-                              🏆 Certified Coach & Ayurveda Expert
-                            </span>
-                            
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-snug tracking-wide uppercase">
-                                Train Like a <br/>
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">Champion</span>
-                            </h1>
-                            
-                            <p className="text-base md:text-lg text-slate-200 mb-10 max-w-xl mx-auto leading-relaxed font-light">
-                              Expert Weight Loss Coaching, Online Yoga & Authentic Ayurvedic Supplements guide by Saroj.
-                            </p>
-                            
+                        <div className="max-w-7xl mx-auto text-center relative z-10 fade-in-up">
+                            <span className="inline-block py-2 px-5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 font-bold text-xs uppercase tracking-[0.2em] mb-8 border border-white/20">🏆 Certified Coach & Ayurveda Expert</span>
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-snug tracking-wide uppercase">Train Like a <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">Champion</span></h1>
+                            <p className="text-base md:text-lg text-slate-200 mb-10 max-w-xl mx-auto leading-relaxed font-light">Expert Weight Loss Coaching, Online Yoga & Authentic Ayurvedic Supplements guide by Saroj.</p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                              <a href="https://wa.me/919217225060" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-emerald-500 text-white px-8 py-4 rounded-full font-bold tracking-wide hover:shadow-emerald-500/40 hover:shadow-xl hover:-translate-y-1 transition-all uppercase text-sm">
-                                <i className="fa-brands fa-whatsapp text-xl"></i> Chat on WhatsApp
-                              </a>
-                              <a href="#planner" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-full font-bold tracking-wide hover:bg-white/20 transition-all uppercase text-sm">
-                                <i className="fa-solid fa-robot text-xl"></i> Try AI Planner
-                              </a>
+                              <a href="https://wa.me/919217225060" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-emerald-500 text-white px-8 py-4 rounded-full font-bold tracking-wide hover:shadow-emerald-500/40 hover:shadow-xl hover:-translate-y-1 transition-all uppercase text-sm"><i className="fa-brands fa-whatsapp text-xl"></i> Chat on WhatsApp</a>
+                              <a href="#planner" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-full font-bold tracking-wide hover:bg-white/20 transition-all uppercase text-sm"><i className="fa-solid fa-robot text-xl"></i> Try AI Planner</a>
                             </div>
                         </div>
                     </header>
 
-                    {/* Services Section */}
+                    {/* Services */}
                     <section id="services" className="py-24 px-6 bg-white">
                         <div className="max-w-7xl mx-auto">
-                            <div className="text-center mb-16">
-                                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">My Premium Services</h2>
-                                <div className="h-1 w-20 bg-emerald-500 mx-auto rounded-full"></div>
-                            </div>
-                            
+                            <div className="text-center mb-16"><h2 className="text-3xl font-bold text-slate-900 mb-4">My Premium Services</h2><div className="h-1 w-20 bg-emerald-500 mx-auto rounded-full"></div></div>
                             <div className="grid md:grid-cols-3 gap-8">
-                                <div className="hover-lift bg-white rounded-3xl p-8 border border-slate-100 shadow-sm relative overflow-hidden group">
-                                    <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 text-3xl mb-6 group-hover:scale-110 transition-transform"><i className="fa-solid fa-spa"></i></div>
-                                    <h3 className="text-2xl font-bold mb-3 text-slate-800">Online Yoga</h3>
-                                    <p className="text-slate-500 leading-relaxed">Daily live sessions for flexibility & peace. Morning/Evening batches.</p>
-                                </div>
-                                <div className="hover-lift bg-white rounded-3xl p-8 border border-slate-100 shadow-sm relative overflow-hidden group">
-                                    <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500 text-3xl mb-6 group-hover:scale-110 transition-transform"><i className="fa-solid fa-fire"></i></div>
-                                    <h3 className="text-2xl font-bold mb-3 text-slate-800">Weight Loss</h3>
-                                    <p className="text-slate-500 leading-relaxed">Scientific home workouts. No starvation diet. Guaranteed results.</p>
-                                </div>
-                                <div className="hover-lift bg-white rounded-3xl p-8 border border-slate-100 shadow-sm relative overflow-hidden group">
-                                    <div className="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 text-3xl mb-6 group-hover:scale-110 transition-transform"><i className="fa-solid fa-apple-whole"></i></div>
-                                    <h3 className="text-2xl font-bold mb-3 text-slate-800">Diet Planner</h3>
-                                    <p className="text-slate-500 leading-relaxed">Personalized diet charts based on Ayurveda & Nutrition.</p>
-                                </div>
+                                <div className="hover-lift bg-white rounded-3xl p-8 border border-slate-100 shadow-sm group"><div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 text-3xl mb-6 group-hover:scale-110 transition-transform"><i className="fa-solid fa-spa"></i></div><h3 className="text-2xl font-bold mb-3 text-slate-800">Online Yoga</h3><p className="text-slate-500 leading-relaxed">Daily live sessions for flexibility & peace. Morning/Evening batches.</p></div>
+                                <div className="hover-lift bg-white rounded-3xl p-8 border border-slate-100 shadow-sm group"><div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500 text-3xl mb-6 group-hover:scale-110 transition-transform"><i className="fa-solid fa-fire"></i></div><h3 className="text-2xl font-bold mb-3 text-slate-800">Weight Loss</h3><p className="text-slate-500 leading-relaxed">Scientific home workouts. No starvation diet. Guaranteed results.</p></div>
+                                <div className="hover-lift bg-white rounded-3xl p-8 border border-slate-100 shadow-sm group"><div className="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 text-3xl mb-6 group-hover:scale-110 transition-transform"><i className="fa-solid fa-apple-whole"></i></div><h3 className="text-2xl font-bold mb-3 text-slate-800">Diet Planner</h3><p className="text-slate-500 leading-relaxed">Personalized diet charts based on Ayurveda & Nutrition.</p></div>
                             </div>
                         </div>
                     </section>
@@ -434,19 +378,6 @@
                                 {/* Right: BMI Calculator */}
                                 <div className="lg:mt-24">
                                     <BMICalculator />
-                                    
-                                    {/* Mini FAQ */}
-                                    <div className="mt-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-                                        <h3 className="font-bold text-slate-800 mb-4">Quick Questions</h3>
-                                        {faqs.map((f, i) => (
-                                            <div key={i} className="mb-3 last:mb-0 border-b last:border-0 border-slate-100 pb-3 last:pb-0">
-                                                <div onClick={() => setOpenFaq(openFaq === i ? null : i)} className="font-semibold text-sm cursor-pointer flex justify-between text-slate-700 hover:text-emerald-600">
-                                                    {f.q} <span>{openFaq === i ? '-' : '+'}</span>
-                                                </div>
-                                                {openFaq === i && <p className="text-xs text-slate-500 mt-2">{f.a}</p>}
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -459,16 +390,84 @@
                         </div>
                     </section>
 
-                    {/* Pricing */}
+                    {/* Pricing - UPDATED & DETAILED */}
                     <section id="pricing" className="py-24 px-6 bg-white">
                         <div className="max-w-7xl mx-auto text-center">
-                            <h2 className="text-3xl font-bold text-slate-900 mb-4">Simple Pricing</h2>
-                            <p className="text-slate-500 mb-16">Choose the plan that fits your goal</p>
+                            <h2 className="text-3xl font-bold text-slate-900 mb-4">Choose Your Plan</h2>
+                            <p className="text-slate-500 mb-16">Select the best coaching program for your fitness goals.</p>
                             
-                            <div className="grid md:grid-cols-3 gap-8 items-center">
-                                <div className="p-8 rounded-3xl border border-slate-200 bg-white hover:border-emerald-300 transition duration-300"><h3 className="font-bold text-slate-500 mb-2 uppercase tracking-wide text-sm">Yoga Batch</h3><div className="text-4xl font-black text-slate-900 mb-6">₹999<span className="text-lg text-slate-400 font-medium">/mo</span></div><a href="https://wa.me/919217225060?text=Join Yoga Batch" className="block w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold hover:bg-slate-200 transition">Get Started</a></div>
-                                <div className="p-10 rounded-3xl bg-slate-900 text-white relative shadow-2xl transform scale-105 z-10"><div className="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-2xl uppercase">Popular</div><h3 className="font-bold text-emerald-400 mb-2 uppercase tracking-wide text-sm">Weight Loss Pro</h3><div className="text-5xl font-black mb-6">₹2499<span className="text-lg text-slate-400 font-medium">/mo</span></div><a href="https://wa.me/919217225060?text=Join Weight Loss Pro" className="block w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400 text-white font-bold hover:shadow-lg transition">Get Started</a></div>
-                                <div className="p-8 rounded-3xl border border-slate-200 bg-white hover:border-emerald-300 transition duration-300"><h3 className="font-bold text-slate-500 mb-2 uppercase tracking-wide text-sm">Personal Coaching</h3><div className="text-4xl font-black text-slate-900 mb-6">₹4999<span className="text-lg text-slate-400 font-medium">/mo</span></div><a href="https://wa.me/919217225060?text=Personal Coaching Enquiry" className="block w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold hover:bg-slate-200 transition">Get Started</a></div>
+                            <div className="grid md:grid-cols-3 gap-8">
+                                {/* Plan 1: Yoga & Mobility */}
+                                <div className="flex flex-col bg-white rounded-3xl border border-slate-200 hover:border-emerald-300 transition duration-300 p-8 shadow-sm hover:shadow-xl relative overflow-hidden">
+                                    <h3 className="text-slate-500 font-bold uppercase text-sm tracking-widest mb-4">Yoga & Flexibility</h3>
+                                    <div className="text-5xl font-black text-slate-900 mb-2">₹999<span className="text-lg font-medium text-slate-400">/mo</span></div>
+                                    <p className="text-slate-500 text-sm mb-8">Perfect for beginners, joint pain relief & mental peace.</p>
+                                    
+                                    <ul className="text-left space-y-4 mb-8 text-slate-600 text-sm flex-1">
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Daily Live Yoga Sessions (Zoom)</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Morning & Evening Batches</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Meditation & Breathing</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Basic Diet Guidance</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Joint Pain Solutions</li>
+                                    </ul>
+                                    <a href="https://wa.me/919217225060?text=I want to join Yoga Classes" className="block w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold hover:bg-emerald-500 hover:text-white transition">Get Started</a>
+                                </div>
+
+                                {/* Plan 2: Weight Loss Pro (Most Popular) */}
+                                <div className="flex flex-col bg-slate-900 text-white rounded-3xl p-8 shadow-2xl relative transform md:-translate-y-4 z-10 border border-slate-700">
+                                    <div className="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-green-400 text-white text-xs font-bold px-4 py-1 rounded-bl-xl rounded-tr-2xl uppercase tracking-wider">Most Popular</div>
+                                    <h3 className="text-emerald-400 font-bold uppercase text-sm tracking-widest mb-4">Weight Loss Pro</h3>
+                                    <div className="text-5xl font-black mb-2">₹2499<span className="text-lg font-medium text-slate-400">/mo</span></div>
+                                    <p className="text-slate-300 text-sm mb-8">Rapid fat loss with science-based diet & home workouts.</p>
+                                    
+                                    <ul className="text-left space-y-4 mb-8 text-slate-200 text-sm flex-1">
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> <strong>Custom Diet Chart</strong> (Veg/Non-Veg)</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> Daily Home Workout Videos</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> No Starvation (Eat & Lose)</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> Weekly Progress Tracking</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> <strong>Bonus:</strong> Supplement Guide</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> WhatsApp Support</li>
+                                    </ul>
+                                    <a href="https://wa.me/919217225060?text=I want to join Weight Loss Pro" className="block w-full py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-green-400 text-white font-bold hover:shadow-lg hover:from-emerald-600 hover:to-green-500 transition text-center shadow-emerald-500/20">Start Transformation</a>
+                                </div>
+
+                                {/* Plan 3: Personal Coaching */}
+                                <div className="flex flex-col bg-white rounded-3xl border border-slate-200 hover:border-emerald-300 transition duration-300 p-8 shadow-sm hover:shadow-xl relative overflow-hidden">
+                                    <h3 className="text-slate-500 font-bold uppercase text-sm tracking-widest mb-4">Elite / Personal</h3>
+                                    <div className="text-5xl font-black text-slate-900 mb-2">₹4999<span className="text-lg font-medium text-slate-400">/mo</span></div>
+                                    <p className="text-slate-500 text-sm mb-8">For athletes or those needing 1-on-1 attention.</p>
+                                    
+                                    <ul className="text-left space-y-4 mb-8 text-slate-600 text-sm flex-1">
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> <strong>1-on-1 Personal Training</strong></li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Athlete Speed & Power Drills</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Advanced Nutrition Plan</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Daily Call Support</li>
+                                        <li className="flex gap-3"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Injury Rehab Guidance</li>
+                                    </ul>
+                                    <a href="https://wa.me/919217225060?text=I need Personal Coaching" className="block w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold hover:bg-emerald-500 hover:text-white transition">Apply Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Testimonials (ADDED BACK) */}
+                    <section className="py-24 px-6 bg-slate-50 border-t border-slate-200">
+                        <div className="max-w-6xl mx-auto">
+                            <h2 className="text-3xl font-bold text-center mb-12 text-slate-900">Success Stories</h2>
+                            <div className="grid md:grid-cols-3 gap-8">
+                                {testimonials.map((t, i) => (
+                                    <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover-lift">
+                                        <div className="text-yellow-400 text-sm mb-4">
+                                            {[...Array(t.star)].map((_,s)=><i key={s} className="fa-solid fa-star"></i>)}
+                                        </div>
+                                        <h4 className="font-bold text-lg mb-2 text-slate-800">{t.result}</h4>
+                                        <p className="text-slate-600 italic mb-6 text-sm">"{t.text}"</p>
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700 text-sm">{t.name[0]}</div>
+                                            <span className="font-semibold text-slate-800 text-sm">{t.name}</span>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </section>
