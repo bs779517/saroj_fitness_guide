@@ -50,7 +50,7 @@
             { name: "Sunita Devi", result: "Joint Pain Relief", text: "Glucosamine aur Yoga se mere ghutno ka dard gayab ho gaya. Thank you Saroj ji.", star: 5 }
         ];
 
-        // --- COMPONENT: AI DIET PLANNER (DARK THEME) ---
+        // --- COMPONENT: AI DIET PLANNER ---
         const DietPlanner = () => {
             const [step, setStep] = useState(1);
             const [loading, setLoading] = useState(false);
@@ -95,6 +95,7 @@
                     };
                 }
 
+                // SAVE DATA TO GOOGLE SHEET
                 const dataToSend = {
                     data: [{
                         date: new Date().toLocaleDateString(),
@@ -188,32 +189,71 @@
             );
         };
 
-        // --- COMPONENT: BMI Calculator (WITH METER) ---
+        // --- COMPONENT: BMI Calculator (WITH METER & SAVE FEATURE) ---
         const BMICalculator = () => {
             const [details, setDetails] = useState({ name: '', phone: '', gender: 'Male', weight: '', height: '' });
             const [bmi, setBmi] = useState(null);
             const [angle, setAngle] = useState(-90);
             const [category, setCategory] = useState('');
             const [showAlert, setShowAlert] = useState(false);
+            const [calculating, setCalculating] = useState(false);
 
             const handleChange = (e) => {
                 setDetails({ ...details, [e.target.name]: e.target.value });
             };
 
-            const calculate = () => {
-                if(!details.weight || !details.height) return;
+            const calculateAndSave = async () => {
+                if(!details.name || !details.phone || !details.weight || !details.height) {
+                    alert("Please fill all fields to check BMI!");
+                    return;
+                }
+
+                setCalculating(true);
+
+                // 1. Calculate BMI
                 const h = parseFloat(details.height) / 100;
                 const val = (parseFloat(details.weight) / (h * h)).toFixed(1);
-                setBmi(val);
+                
+                // 2. Determine Category
+                let cat = '';
+                let alertShow = false;
+                if(val < 18.5) { cat = 'Underweight'; alertShow = true; } 
+                else if(val < 25) { cat = 'Normal'; alertShow = false; } 
+                else if(val < 30) { cat = 'Overweight'; alertShow = true; } 
+                else { cat = 'Obese'; alertShow = true; }
 
-                if(val < 18.5) { setCategory('Underweight'); setShowAlert(true); } 
-                else if(val < 25) { setCategory('Normal'); setShowAlert(false); } 
-                else if(val < 30) { setCategory('Overweight'); setShowAlert(true); } 
-                else { setCategory('Obese'); setShowAlert(true); }
+                // 3. Save Data to SheetDB
+                const dataToSend = {
+                    data: [{
+                        date: new Date().toLocaleDateString(),
+                        name: details.name,
+                        phone: details.phone,
+                        weight: details.weight,
+                        height: details.height,
+                        goal: `BMI Check: ${val}`, // Storing BMI in Goal Column
+                        type: cat // Storing Category in Type Column
+                    }]
+                };
+
+                try {
+                    await fetch(SHEETDB_URL, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dataToSend)
+                    });
+                } catch (error) {
+                    console.error("SheetDB Error (BMI)", error);
+                }
+
+                // 4. Update UI
+                setBmi(val);
+                setCategory(cat);
+                setShowAlert(alertShow);
 
                 let visualBMI = val < 15 ? 15 : (val > 40 ? 40 : val);
                 const rotation = -90 + ((visualBMI - 15) * (180 / 25));
                 setAngle(rotation);
+                setCalculating(false);
             };
 
             return (
@@ -225,20 +265,22 @@
                     </div>
                     <div className="relative z-10">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <input name="name" onChange={handleChange} placeholder="Your Name" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none" />
-                            <input name="phone" onChange={handleChange} placeholder="Phone Number" type="number" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none" />
+                            <input name="name" onChange={handleChange} placeholder="Your Name" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none placeholder-slate-500" />
+                            <input name="phone" onChange={handleChange} placeholder="Phone Number" type="number" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none placeholder-slate-500" />
                         </div>
                         <div className="grid grid-cols-3 gap-4 mb-6">
-                            <input name="weight" onChange={handleChange} placeholder="Weight (kg)" type="number" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none" />
-                            <input name="height" onChange={handleChange} placeholder="Height (cm)" type="number" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none" />
+                            <input name="weight" onChange={handleChange} placeholder="Weight (kg)" type="number" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none placeholder-slate-500" />
+                            <input name="height" onChange={handleChange} placeholder="Height (cm)" type="number" className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none placeholder-slate-500" />
                             <select name="gender" onChange={handleChange} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white focus:border-emerald-500 outline-none">
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
                         </div>
-                        <button onClick={calculate} className="w-full bg-gradient-to-r from-emerald-500 to-green-400 hover:from-emerald-600 hover:to-green-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all mb-8">
-                            Check Result
+                        
+                        <button onClick={calculateAndSave} disabled={calculating} className="w-full bg-gradient-to-r from-emerald-500 to-green-400 hover:from-emerald-600 hover:to-green-500 text-white font-bold py-4 rounded-xl shadow-lg transition-all mb-8 flex justify-center items-center gap-2">
+                            {calculating ? <div className="loader"></div> : <>Check Result & Save <i className="fa-solid fa-calculator"></i></>}
                         </button>
+
                         <div className="flex flex-col items-center">
                              <div className="relative w-64 h-32 overflow-hidden mb-6">
                                 <div className="w-64 h-32 rounded-t-full bg-gradient-to-r from-yellow-400 via-green-500 to-red-500 opacity-90"></div>
@@ -257,7 +299,7 @@
                                </div>
                              </div>
                              {showAlert && (
-                                <div className="mt-6 bg-red-500/10 border border-red-500/40 rounded-2xl p-4 text-left w-full">
+                                <div className="mt-6 bg-red-500/10 border border-red-500/40 rounded-2xl p-4 text-left w-full animate-pulse-once">
                                     <div className="flex items-start gap-3">
                                         <div className="text-2xl">⚠️</div>
                                         <div>
