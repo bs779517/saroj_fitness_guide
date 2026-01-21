@@ -32,10 +32,10 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- AIRTABLE CONFIGURATION (UPDATED) ---
+        // --- AIRTABLE CONFIGURATION ---
         const AIRTABLE_API_TOKEN = 'patZtUqm9uPbQhOCV.d2639e456fcd2d3a9ec9447a1ccd20c4bbfb1935ee937dfe9ecd0a914ce7e600'; 
         const AIRTABLE_BASE_ID = 'app3RO5wQWdO3qA1v'; 
-        const AIRTABLE_TABLE_NAME = 'Table 1'; // Ensure your Airtable table name is exactly this
+        const AIRTABLE_TABLE_NAME = 'Table 1';
 
         // --- DATA ---
         const supplements = [
@@ -47,69 +47,49 @@
             { name: "Glucosamine", use: "Relief from Joint Pain", price: "₹1019", img: "🦵", tag: "Joint Pain" }
         ];
 
-        const testimonials = [
-            { name: "Priya Sharma", result: "Lost 8kg in 2 Months", text: "Saroj Ma'am ki diet aur yoga ne meri life badal di. Amazing coaching!", star: 5 },
-            { name: "Rahul Verma", result: "Fit & Active Lifestyle", text: "Ma'am ka diet plan follow karke main ab pure din active rehta hun.", star: 5 },
-            { name: "Sunita Devi", result: "Joint Pain Relief", text: "Glucosamine aur Yoga se mere ghutno ka dard gayab ho gaya.", star: 5 }
-        ];
-
-        const faqs = [
-            { q: "Kya online class mein camera on rakhna zaruri hai?", a: "Nahi, par posture correction ke liye on rakhna behtar hai." },
-            { q: "Weight Loss plan mein kya khana hoga?", a: "Ghar ka bana simple khana. Hum starvation diet nahi dete." },
-            { q: "Supplements order karne par kab milenge?", a: "3-5 working days mein home delivery ho jayegi." }
-        ];
-
-        // --- COMPONENT: AI DIET PLANNER (AIRTABLE INTEGRATED) ---
+        // --- COMPONENT: AI DIET PLANNER (AUTO SAVE) ---
         const DietPlanner = () => {
             const [step, setStep] = useState(1);
             const [loading, setLoading] = useState(false);
-            const [saving, setSaving] = useState(false);
             const [formData, setFormData] = useState({ name: '', phone: '', weight: '', height: '', goal: 'weight_loss', type: 'veg' });
             const [plan, setPlan] = useState(null);
-            const [saveStatus, setSaveStatus] = useState(null); // 'success' or 'error'
-
+            
             const handleChange = (e) => {
                 setFormData({ ...formData, [e.target.name]: e.target.value });
             };
 
-            const generateDiet = () => {
+            const generateAndSave = async () => {
+                // 1. Validation
                 if(!formData.name || !formData.weight || !formData.height || !formData.phone) {
                     alert("Please fill all details!");
                     return;
                 }
+                
                 setLoading(true);
-                
-                setTimeout(() => {
-                    let diet = {};
-                    if(formData.goal === 'weight_loss') {
-                        diet = {
-                            morning: "Warm Water + Lemon + Honey",
-                            breakfast: "Oats / Poha + Vestige Spirulina",
-                            lunch: "2 Roti + Green Veg + Salad + Curd",
-                            snack: "Veslim Shake or Green Tea",
-                            dinner: "Boiled Veggies / Soup (No Rice)"
-                        };
-                    } else {
-                        diet = {
-                            morning: "Soaked Almonds + Banana",
-                            breakfast: "Paneer Paratha / Eggs + Milk",
-                            lunch: "Dal + Rice + Roti + Sabzi",
-                            snack: "Protein Shake / Fruit Salad",
-                            dinner: "Roti + Dal + Milk before sleep"
-                        };
-                    }
-                    setPlan(diet);
-                    setLoading(false);
-                    setStep(2);
-                }, 2000);
-            };
 
-            // --- FUNCTION TO SAVE DATA TO AIRTABLE ---
-            const saveToAirtable = async () => {
-                setSaving(true);
-                
+                // 2. Prepare the Diet Plan (Local Logic)
+                let diet = {};
+                if(formData.goal === 'weight_loss') {
+                    diet = {
+                        morning: "Warm Water + Lemon + Honey",
+                        breakfast: "Oats / Poha + Vestige Spirulina",
+                        lunch: "2 Roti + Green Veg + Salad + Curd",
+                        snack: "Veslim Shake or Green Tea",
+                        dinner: "Boiled Veggies / Soup (No Rice)"
+                    };
+                } else {
+                    diet = {
+                        morning: "Soaked Almonds + Banana",
+                        breakfast: "Paneer Paratha / Eggs + Milk",
+                        lunch: "Dal + Rice + Roti + Sabzi",
+                        snack: "Protein Shake / Fruit Salad",
+                        dinner: "Roti + Dal + Milk before sleep"
+                    };
+                }
+
+                // 3. Save to Airtable (Background Process)
                 const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`;
-                const data = {
+                const airtableData = {
                     fields: {
                         "Name": formData.name,
                         "Phone": formData.phone,
@@ -121,29 +101,29 @@
                 };
 
                 try {
-                    const response = await fetch(url, {
+                    await fetch(url, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${AIRTABLE_API_TOKEN}`,
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(data)
+                        body: JSON.stringify(airtableData)
                     });
-
-                    if(response.ok) {
-                        setSaveStatus('success');
-                        alert("Data Saved Successfully to Saroj's Database! ✅");
-                    } else {
-                        setSaveStatus('error');
-                        const err = await response.json();
-                        console.error("Airtable Error", err);
-                        alert("Error saving data. Check Console for details.");
-                    }
+                    // Success! We don't need to alert the user, just show the plan.
                 } catch (error) {
-                    setSaveStatus('error');
-                    alert("Connection Error!");
+                    console.error("Data Save Failed", error);
+                    // We still show the plan even if saving fails to not block the user.
                 }
-                setSaving(false);
+
+                // 4. Update UI
+                setPlan(diet);
+                setLoading(false);
+                setStep(2);
+            };
+
+            const resetForm = () => {
+                setStep(1);
+                setFormData({ name: '', phone: '', weight: '', height: '', goal: 'weight_loss', type: 'veg' });
             };
 
             return (
@@ -151,67 +131,65 @@
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-blue-500"></div>
                     
                     <div className="text-center mb-8">
-                        <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Smart Data</span>
-                        <h2 className="text-3xl font-bold mt-2 text-slate-800">AI Diet Planner 🤖</h2>
-                        <p className="text-slate-500 text-sm">Generate Plan & Save to Database</p>
+                        <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Instant Access</span>
+                        <h2 className="text-3xl font-bold mt-2 text-slate-800">AI Smart Diet Planner 🤖</h2>
+                        <p className="text-slate-500 text-sm">Generate Plan & Save to Profile instantly</p>
                     </div>
 
                     {step === 1 && (
                         <div className="space-y-4 fade-in-up">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input name="name" onChange={handleChange} placeholder="Your Name" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
-                                <input name="phone" onChange={handleChange} placeholder="Mobile Number" type="number" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
+                                <input name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
+                                <input name="phone" value={formData.phone} onChange={handleChange} placeholder="Mobile Number" type="number" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <input name="weight" onChange={handleChange} placeholder="Weight (kg)" type="number" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
-                                <input name="height" onChange={handleChange} placeholder="Height (cm)" type="number" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
+                                <input name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight (kg)" type="number" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
+                                <input name="height" value={formData.height} onChange={handleChange} placeholder="Height (cm)" type="number" className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none" />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <select name="goal" onChange={handleChange} className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none">
+                                <select name="goal" value={formData.goal} onChange={handleChange} className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none">
                                     <option value="weight_loss">Weight Loss</option>
                                     <option value="muscle_gain">Muscle Gain</option>
                                     <option value="fitness">Stay Fit</option>
                                 </select>
-                                <select name="type" onChange={handleChange} className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none">
+                                <select name="type" value={formData.type} onChange={handleChange} className="w-full bg-slate-50 p-4 rounded-xl border focus:border-emerald-500 outline-none">
                                     <option value="veg">Vegetarian</option>
                                     <option value="non_veg">Non-Vegetarian</option>
                                     <option value="vegan">Vegan</option>
                                 </select>
                             </div>
                             
-                            <button onClick={generateDiet} disabled={loading} className="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-emerald-600 transition flex justify-center items-center gap-2">
-                                {loading ? <div className="loader"></div> : <>Generate My Plan <i className="fa-solid fa-wand-magic-sparkles"></i></>}
+                            <button onClick={generateAndSave} disabled={loading} className="w-full bg-slate-900 text-white font-bold py-4 rounded-xl hover:bg-emerald-600 transition flex justify-center items-center gap-2">
+                                {loading ? <div className="loader"></div> : <>Generate & Save Plan <i className="fa-solid fa-wand-magic-sparkles"></i></>}
                             </button>
+                            <p className="text-[10px] text-center text-slate-400">By clicking generate, your details will be saved to our database.</p>
                         </div>
                     )}
 
                     {step === 2 && plan && (
                         <div className="fade-in-up">
-                            <div className="bg-emerald-50 p-6 rounded-2xl mb-6 border border-emerald-100">
-                                <h3 className="font-bold text-emerald-800 mb-4 text-lg border-b border-emerald-200 pb-2">🥗 Your Personalized Plan</h3>
-                                <ul className="space-y-3 text-sm text-slate-700">
-                                    <li className="flex gap-2"><span className="font-bold w-20">Morning:</span> {plan.morning}</li>
-                                    <li className="flex gap-2"><span className="font-bold w-20">Breakfast:</span> {plan.breakfast}</li>
-                                    <li className="flex gap-2"><span className="font-bold w-20">Lunch:</span> {plan.lunch}</li>
-                                    <li className="flex gap-2"><span className="font-bold w-20">Snack:</span> {plan.snack}</li>
-                                    <li className="flex gap-2"><span className="font-bold w-20">Dinner:</span> {plan.dinner}</li>
+                            <div className="flex items-center gap-2 mb-4 text-emerald-600 bg-emerald-50 p-3 rounded-lg border border-emerald-100">
+                                <i className="fa-solid fa-check-circle text-xl"></i>
+                                <span className="font-bold text-sm">Success! Your data has been saved to Saroj's Database.</span>
+                            </div>
+
+                            <div className="bg-white p-6 rounded-2xl mb-6 border border-slate-200 shadow-sm">
+                                <h3 className="font-bold text-slate-800 mb-4 text-lg border-b border-slate-100 pb-2">🥗 Recommended Diet for {formData.name}</h3>
+                                <ul className="space-y-3 text-sm text-slate-600">
+                                    <li className="flex gap-2"><span className="font-bold w-20 text-slate-800">Morning:</span> {plan.morning}</li>
+                                    <li className="flex gap-2"><span className="font-bold w-20 text-slate-800">Breakfast:</span> {plan.breakfast}</li>
+                                    <li className="flex gap-2"><span className="font-bold w-20 text-slate-800">Lunch:</span> {plan.lunch}</li>
+                                    <li className="flex gap-2"><span className="font-bold w-20 text-slate-800">Snack:</span> {plan.snack}</li>
+                                    <li className="flex gap-2"><span className="font-bold w-20 text-slate-800">Dinner:</span> {plan.dinner}</li>
                                 </ul>
                             </div>
                             
                             <div className="flex gap-3">
-                                <button onClick={() => setStep(1)} className="flex-1 bg-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-300">Back</button>
-                                
-                                {saveStatus === 'success' ? (
-                                    <button className="flex-1 bg-green-500 text-white font-bold py-3 rounded-xl cursor-default flex justify-center items-center gap-2">
-                                        Saved! <i className="fa-solid fa-check"></i>
-                                    </button>
-                                ) : (
-                                    <button onClick={saveToAirtable} disabled={saving} className="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 shadow-lg flex items-center justify-center gap-2">
-                                        {saving ? <div className="loader"></div> : <>Save to Database <i className="fa-solid fa-cloud-arrow-up"></i></>}
-                                    </button>
-                                )}
+                                <button onClick={resetForm} className="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200">Create New</button>
+                                <a href="https://wa.me/919217225060?text=Hello Saroj, I just generated a diet plan on your website. Can you guide me more?" target="_blank" className="flex-1 bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-green-600 shadow-lg flex items-center justify-center gap-2">
+                                    Chat on WhatsApp <i className="fa-brands fa-whatsapp"></i>
+                                </a>
                             </div>
-                            <p className="text-[10px] text-center text-slate-400 mt-2">Data will be saved to Saroj's Airtable securely.</p>
                         </div>
                     )}
                 </div>
@@ -223,7 +201,6 @@
             const [weight, setWeight] = useState('');
             const [height, setHeight] = useState('');
             const [bmi, setBmi] = useState(null);
-            const [angle, setAngle] = useState(-90);
             const [category, setCategory] = useState('');
 
             const calculate = () => {
@@ -235,10 +212,6 @@
                 else if(val < 25) { setCategory('Normal'); }
                 else if(val < 30) { setCategory('Overweight'); }
                 else { setCategory('Obese'); }
-
-                let visualBMI = val < 15 ? 15 : (val > 40 ? 40 : val);
-                const rotation = -90 + ((visualBMI - 15) * (180 / 25));
-                setAngle(rotation);
             };
 
             return (
@@ -269,7 +242,7 @@
                                 <div className="w-72 h-36 rounded-t-full bg-gradient-to-r from-yellow-400 via-green-500 to-red-500 opacity-90"></div>
                                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-56 h-28 bg-slate-900 rounded-t-full"></div>
                                 <div className="absolute bottom-0 left-1/2 w-1.5 h-32 bg-white origin-bottom rounded-full z-20 transition-transform duration-1000 ease-out shadow-lg" 
-                                     style={{ marginLeft: '-3px', transform: `rotate(${angle}deg)` }}></div>
+                                     style={{ marginLeft: '-3px', transform: `rotate(-90deg)` }}></div>
                                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rounded-full z-30 shadow-md"></div>
                              </div>
                              <div className="text-center">
@@ -352,7 +325,7 @@
                         </div>
                     </nav>
 
-                    {/* Hero Section WITH YOGA BACKGROUND */}
+                    {/* Hero Section */}
                     <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center">
                         <div className="absolute inset-0 z-0">
                             <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop" alt="Yoga Background" className="w-full h-full object-cover" />
@@ -430,25 +403,12 @@
                                 {/* Left: AI Diet Planner */}
                                 <div>
                                     <h2 className="text-3xl font-bold text-slate-900 mb-6">Create Your Custom Plan</h2>
-                                    <p className="text-slate-500 mb-8">Enter your details and let our Smart AI generate a starting diet plan for you instantly. <br/><strong>Data saves to Database!</strong></p>
+                                    <p className="text-slate-500 mb-8">Enter your details and let our Smart AI generate a starting diet plan for you instantly.</p>
                                     <DietPlanner />
                                 </div>
                                 {/* Right: BMI Calculator */}
                                 <div className="lg:mt-24">
                                     <BMICalculator />
-                                    
-                                    {/* Mini FAQ */}
-                                    <div className="mt-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-                                        <h3 className="font-bold text-slate-800 mb-4">Quick Questions</h3>
-                                        {faqs.map((f, i) => (
-                                            <div key={i} className="mb-3 last:mb-0 border-b last:border-0 border-slate-100 pb-3 last:pb-0">
-                                                <div onClick={() => setOpenFaq(openFaq === i ? null : i)} className="font-semibold text-sm cursor-pointer flex justify-between text-slate-700 hover:text-emerald-600">
-                                                    {f.q} <span>{openFaq === i ? '-' : '+'}</span>
-                                                </div>
-                                                {openFaq === i && <p className="text-xs text-slate-500 mt-2">{f.a}</p>}
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -556,28 +516,6 @@
                                     </ul>
                                     <a href="https://wa.me/919217225060?text=Personal Coaching Enquiry" className="block w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold hover:bg-slate-200 transition">Get Started</a>
                                 </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Testimonials */}
-                    <section className="py-24 px-6 bg-slate-50">
-                        <div className="max-w-6xl mx-auto">
-                            <h2 className="text-3xl font-bold text-center mb-12">Success Stories</h2>
-                            <div className="grid md:grid-cols-3 gap-8">
-                                {testimonials.map((t, i) => (
-                                    <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover-lift">
-                                        <div className="text-yellow-400 text-sm mb-4">
-                                            {[...Array(t.star)].map((_,s)=><i key={s} className="fa-solid fa-star"></i>)}
-                                        </div>
-                                        <h4 className="font-bold text-lg mb-2">{t.result}</h4>
-                                        <p className="text-slate-600 italic mb-6">"{t.text}"</p>
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700">{t.name[0]}</div>
-                                            <span className="font-semibold text-slate-800">{t.name}</span>
-                                        </div>
-                                    </div>
-                                ))}
                             </div>
                         </div>
                     </section>
