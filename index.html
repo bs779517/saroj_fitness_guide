@@ -1,167 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Saroj Fitness & Ayurveda | BMI Machine Report</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saroj Fitness & Ayurveda Guide</title>
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Open Sans', sans-serif; background-color: #f8fafc; }
+        h1, h2, h3, h4, .brand-font { font-family: 'Montserrat', sans-serif; }
+        
+        .scroll-hide::-webkit-scrollbar { display: none; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #10b981; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-  <!-- React -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <style>
-    body { font-family: 'Open Sans', sans-serif; }
-    h1,h2,h3 { font-family: 'Montserrat', sans-serif; }
-  </style>
+        /* --- PDF STYLES --- */
+        #pdf-container { position: fixed; left: -9999px; top: 0; width: 210mm; min-height: 297mm; background: white; color: #333; font-family: 'Open Sans', sans-serif; z-index: 10000; }
+        .pdf-header { position: relative; height: 140px; background: white; border-bottom: 3px solid #ef4444; overflow: hidden; }
+        .header-curve-blue { position: absolute; top: -80px; right: -50px; width: 280px; height: 280px; background: #3B82F6; border-radius: 50%; z-index: 1; }
+        .header-curve-purple { position: absolute; top: 20px; right: 120px; width: 120px; height: 120px; background: #4F46E5; border-radius: 50%; z-index: 2; opacity: 0.9; }
+        .client-strip { background: linear-gradient(90deg, #4F46E5, #2563eb); color: white; padding: 15px 40px; margin: 20px 40px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .man-row { display: flex; justify-content: center; gap: 15px; margin: 25px 0; align-items: flex-end; }
+        .man-icon { font-size: 35px; color: #fb923c; } 
+        .man-icon.green { color: #22c55e; transform: scale(1.2); }
+        .man-icon.red { color: #ef4444; }
+        .star-badge { width: 95px; height: 95px; background: #22c55e; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold; margin: 0 auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .star-badge.green { background: #22c55e; } .star-badge.light-green { background: #84cc16; } .star-badge.red { background: #ef4444; }
+        .blue-title-bar { background: #3B82F6; color: white; padding: 8px 0; text-align: center; font-weight: bold; font-size: 18px; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .sub-title { color: #d97706; font-weight: bold; padding: 10px 40px 0 40px; font-size: 14px; text-transform: uppercase; }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 2px solid #e2e8f0; margin: 10px 40px; border-bottom: 2px solid #e2e8f0; }
+        .grid-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px dashed #cbd5e1; border-right: 1px dashed #cbd5e1; }
+        .grid-item:nth-child(2n) { border-right: none; }
+        .status-icon { font-size: 16px; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; }
+        .status-icon.high { color: #ef4444; } .status-icon.low { color: #f59e0b; } .status-icon.ok { color: #22c55e; } .status-icon.borderline { color: #ef4444; }
+        .coach-footer { background: #FFD700; padding: 15px 30px; margin: 20px 40px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eab308; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    </style>
 </head>
+<body class="text-slate-800 antialiased overflow-x-hidden">
+    
+    <div id="root"></div>
 
-<body class="bg-slate-900 text-white">
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const SHEETDB_URL = 'https://sheetdb.io/api/v1/fi4eegqr9v38e';
 
-<div id="root"></div>
+        // --- GENDER BASED REFERENCES ---
+        const REFERENCES = {
+            Male: {
+                fat: { min: 8, max: 20 },
+                muscle: { min: 45, max: 65 }, // Avg range for healthy male
+                bone: { min: 2.5, max: 4.0 },
+                water: { min: 50, max: 65 },
+                bmi: { min: 18.5, max: 24.9 }
+            },
+            Female: {
+                fat: { min: 21, max: 33 }, // Women need more fat
+                muscle: { min: 30, max: 45 }, // Women naturally have less muscle
+                bone: { min: 1.8, max: 3.0 },
+                water: { min: 45, max: 60 },
+                bmi: { min: 18.5, max: 24.9 }
+            }
+        };
 
-<script type="text/babel">
+        const supplements = [
+            { name: "Vestige Spirulina", use: "Superfood for Immunity", price: "₹503", img: "🌿" },
+            { name: "Vestige Flax Oil", use: "Omega-3 for Heart", price: "₹756", img: "❤️" },
+            { name: "Veslim Shake", use: "Meal Replacement", price: "₹2327", img: "🥤" },
+            { name: "Vestige Noni", use: "Metabolism & Detox", price: "₹701", img: "🧬" },
+            { name: "Calcium", use: "Strong Bones", price: "₹314", img: "🦴" },
+            { name: "Glucosamine", use: "Joint Pain Relief", price: "₹1019", img: "🦵" }
+        ];
 
-function App() {
+        const testimonials = [
+            { name: "Priya Sharma", result: "Lost 8kg", text: "Saroj Ma'am ki diet aur yoga ne meri life badal di.", star: 5 },
+            { name: "Rahul Verma", result: "Speed Up", text: "Professional athlete training ke liye best coach hain.", star: 5 },
+            { name: "Sunita Devi", result: "Pain Free", text: "Glucosamine aur Yoga se dard gayab ho gaya.", star: 5 }
+        ];
 
-  const [form, setForm] = React.useState({
-    name: "",
-    age: "",
-    gender: "Male",
-    weight: "",
-    height: ""
-  });
+        // --- HELPER: STATUS LOGIC ---
+        const getStatus = (val, min, max) => {
+            const v = parseFloat(val);
+            if (v > max) return { text: 'High', class: 'high', icon: 'fa-arrow-up' };
+            if (v < min) return { text: 'Low', class: 'low', icon: 'fa-arrow-down' };
+            if (v >= max - (max*0.05)) return { text: 'Borderline', class: 'borderline', icon: 'fa-circle-exclamation' }; 
+            return { text: 'Normal', class: 'ok', icon: 'fa-thumbs-up' };
+        };
 
-  const [result, setResult] = React.useState(null);
+        // --- NAVBAR ---
+        const Navbar = () => (
+            <nav className="fixed w-full z-50 glass top-0 left-0 border-b border-slate-100">
+                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                    <div className="text-2xl font-black tracking-tight text-slate-900">SAROJ<span className="text-emerald-600">FIT</span>.</div>
+                    <div className="hidden md:flex space-x-8 font-bold text-slate-600 text-xs uppercase tracking-widest">
+                        <a href="#services" className="hover:text-emerald-600 transition">Services</a>
+                        <a href="#planner" className="hover:text-emerald-600 transition">AI Planner</a>
+                        <a href="#store" className="hover:text-emerald-600 transition">Store</a>
+                    </div>
+                    <a href="#contact" className="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-600 transition shadow-lg">Contact Me</a>
+                </div>
+            </nav>
+        );
 
-  const handleChange = e =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+        // --- HERO ---
+        const Hero = () => (
+            <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center bg-slate-900">
+                <div className="absolute inset-0 z-0 opacity-40"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop" alt="Yoga Background" className="w-full h-full object-cover" /></div>
+                <div className="max-w-7xl mx-auto text-center relative z-10 fade-in-up">
+                    <span className="inline-block py-2 px-5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 font-bold text-xs uppercase tracking-[0.2em] mb-8 border border-white/20">🏆 Certified Coach</span>
+                    <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase">Train Like a <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">Champion</span></h1>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <a href="https://wa.me/919217225060" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-emerald-500 text-white px-8 py-4 rounded-full font-bold hover:shadow-xl transition text-sm"><i className="fa-brands fa-whatsapp text-xl"></i> Chat on WhatsApp</a>
+                        <a href="#planner" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/20 transition text-sm"><i className="fa-solid fa-robot text-xl"></i> Try AI Planner</a>
+                    </div>
+                </div>
+            </header>
+        );
 
-  const calculate = () => {
+        // --- SERVICES ---
+        const Services = () => (
+            <section id="services" className="py-24 px-6 bg-white"><div className="max-w-7xl mx-auto text-center"><h2 className="text-3xl font-bold text-slate-900 mb-12">My Premium Services</h2><div className="grid md:grid-cols-3 gap-8"><div className="bg-white rounded-3xl p-8 border hover:shadow-xl transition"><div className="text-4xl mb-4 text-emerald-500"><i className="fa-solid fa-spa"></i></div><h3 className="text-xl font-bold mb-2">Online Yoga</h3><p className="text-slate-500">Live sessions for flexibility & peace.</p></div><div className="bg-white rounded-3xl p-8 border hover:shadow-xl transition"><div className="text-4xl mb-4 text-orange-500"><i className="fa-solid fa-fire"></i></div><h3 className="text-xl font-bold mb-2">Weight Loss</h3><p className="text-slate-500">Home workouts & diet plans.</p></div><div className="bg-white rounded-3xl p-8 border hover:shadow-xl transition"><div className="text-4xl mb-4 text-rose-500"><i className="fa-solid fa-apple-whole"></i></div><h3 className="text-xl font-bold mb-2">Diet Charts</h3><p className="text-slate-500">Personalized nutrition advice.</p></div></div></div></section>
+        );
 
-    const w = parseFloat(form.weight);
-    const h = parseFloat(form.height) / 100;
-    const age = parseInt(form.age);
-    const male = form.gender === "Male";
+        // --- DIET PLANNER ---
+        const DietPlanner = () => {
+            const [step, setStep] = useState(1);
+            const [loading, setLoading] = useState(false);
+            const [formData, setFormData] = useState({ name: '', phone: '', weight: '', height: '', goal: 'Weight Loss', type: 'Vegetarian' });
+            const [plan, setPlan] = useState(null);
+            
+            const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    if (!w || !h || !age) return;
+            const generateAndSave = async () => {
+                if(!formData.name || !formData.weight || !formData.height) return alert("Fill all details!");
+                setLoading(true);
+                let diet = {};
+                if(formData.goal === 'Weight Loss') {
+                    diet = { morning: "Warm Water + Lemon + Honey", breakfast: "Oats + Spirulina", lunch: "2 Roti + Green Veg", snack: "Green Tea", dinner: "Soup/Salad" };
+                } else if (formData.goal === 'Muscle Gain') {
+                    diet = { morning: "Banana + Milk", breakfast: "Paneer/Eggs + Toast", lunch: "Rice + Rajma + Roti", snack: "Protein Shake", dinner: "Roti + Chicken/Paneer" };
+                } else {
+                    diet = { morning: "Warm Water + Almonds", breakfast: "Poha/Upma", lunch: "Roti + Sabzi", snack: "Fruit", dinner: "Khichdi" };
+                }
+                try { await fetch(SHEETDB_URL, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({data:[{date: new Date().toLocaleDateString(), ...formData, goal: `Diet: ${formData.goal} (${formData.type})`}]}) }); } catch(e){}
+                setPlan(diet); setLoading(false); setStep(2);
+            };
 
-    // ===== MACHINE-GRADE BIA LOGIC =====
+            return (
+                <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-2xl border border-slate-700 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-blue-500"></div>
+                    <div className="text-center mb-8"><h2 className="text-3xl font-bold mt-2">AI Diet Planner 🤖</h2><p className="text-slate-400 text-sm">Detailed Nutrition Plan</p></div>
+                    {step === 1 && (
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4"><input name="name" onChange={handleChange} placeholder="Name" className="bg-slate-800 p-4 rounded-xl w-full" /><input name="phone" onChange={handleChange} placeholder="Phone" className="bg-slate-800 p-4 rounded-xl w-full" /></div>
+                            <div className="grid grid-cols-2 gap-4"><input name="weight" onChange={handleChange} placeholder="Weight (kg)" type="number" className="bg-slate-800 p-4 rounded-xl w-full" /><input name="height" onChange={handleChange} placeholder="Height (cm)" type="number" className="bg-slate-800 p-4 rounded-xl w-full" /></div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <select name="goal" onChange={handleChange} className="bg-slate-800 p-4 rounded-xl w-full text-slate-400"><option>Weight Loss</option><option>Muscle Gain</option><option>Stay Fit</option></select>
+                                <select name="type" onChange={handleChange} className="bg-slate-800 p-4 rounded-xl w-full text-slate-400"><option>Vegetarian</option><option>Non-Vegetarian</option><option>Vegan</option></select>
+                            </div>
+                            <button onClick={generateAndSave} disabled={loading} className="w-full bg-emerald-500 hover:bg-emerald-600 py-4 rounded-xl font-bold">{loading ? "Generating..." : "Get Detailed Plan"}</button>
+                        </div>
+                    )}
+                    {step === 2 && plan && (
+                        <div className="bg-slate-800 p-6 rounded-2xl fade-in-up">
+                            <h3 className="font-bold text-emerald-400 mb-4 border-b border-slate-700 pb-2">🥗 Daily Routine for {formData.name}</h3>
+                            <ul className="space-y-4 text-sm text-slate-300">
+                                <li><span className="text-emerald-500 font-bold uppercase">Morning:</span> {plan.morning}</li>
+                                <li><span className="text-emerald-500 font-bold uppercase">Breakfast:</span> {plan.breakfast}</li>
+                                <li><span className="text-emerald-500 font-bold uppercase">Lunch:</span> {plan.lunch}</li>
+                                <li><span className="text-emerald-500 font-bold uppercase">Snack:</span> {plan.snack}</li>
+                                <li><span className="text-emerald-500 font-bold uppercase">Dinner:</span> {plan.dinner}</li>
+                            </ul>
+                            <button onClick={()=>setStep(1)} className="mt-6 text-xs text-center w-full text-slate-500">Create New Plan</button>
+                        </div>
+                    )}
+                </div>
+            );
+        };
 
-    const bmi = (w / (h * h)).toFixed(1);
+        // --- BMI CALCULATOR (WITH GENDER LOGIC) ---
+        const BMICalculator = () => {
+            const [d, setD] = useState({ name: '', phone: '', age: '', gender: 'Male', weight: '', height: '' });
+            const [r, setR] = useState(null);
+            const [loading, setLoading] = useState(false);
+            const [angle, setAngle] = useState(-90);
 
-    const bodyFat =
-      ((1.2 * bmi) + (0.23 * age) - (male ? 16.2 : 5.4)).toFixed(1);
+            const calculate = async () => {
+                if(!d.name || !d.weight || !d.height || !d.age) return alert("Fill all details!");
+                setLoading(true);
 
-    const fatMass = (w * bodyFat / 100).toFixed(1);
-    const leanMass = (w - fatMass).toFixed(1);
+                const h_m = d.height / 100;
+                const w = parseFloat(d.weight);
+                const age = parseInt(d.age);
+                const isMale = d.gender === 'Male';
+                
+                // Gender specific adjustment
+                const refs = isMale ? REFERENCES.Male : REFERENCES.Female;
 
-    const muscleMass = (leanMass * 0.75).toFixed(1);
-    const skeletalMuscle = (leanMass * (male ? 0.55 : 0.50)).toFixed(1);
+                const bmi = (w / (h_m * h_m)).toFixed(1);
+                
+                // Formulas adjusted for gender
+                // Fat Formula (Deurenberg) - uses 10.8 x 1 for male, 0 for female
+                let fat = ((1.20 * bmi) + (0.23 * age) - (isMale ? 10.8 : 0) - 5.4).toFixed(1);
+                if(fat < 5) fat = 5;
 
-    const bodyWater = (
-      male ? 60 - bodyFat * 0.15 : 55 - bodyFat * 0.15
-    ).toFixed(1);
+                // Muscle Mass Estimation (Crude)
+                const muscleFactor = isMale ? 0.42 : 0.36; // Females generally have less muscle mass %
+                const muscle = (w * muscleFactor).toFixed(2);
+                
+                // Skeletal Muscle (Approx 57% of muscle mass)
+                const skelMuscle = (parseFloat(muscle) * 0.57).toFixed(1);
+                
+                const bone = (w * 0.035).toFixed(2);
+                const water = (isMale ? 58 : 52).toFixed(1); // Standard avg
+                
+                let bmr = (10 * w) + (6.25 * d.height) - (5 * age);
+                bmr = (isMale ? bmr + 5 : bmr - 161).toFixed(0);
+                
+                const metAge = bmi > 25 ? age + 5 : (bmi < 18.5 ? age : age - 3);
+                const vFat = (bmi > 30 ? 15 : (bmi > 25 ? 9 : 4));
+                
+                let visualBMI = bmi < 15 ? 15 : (bmi > 40 ? 40 : bmi);
+                setAngle(-90 + ((visualBMI - 15) * (180 / 25)));
 
-    const visceralFat =
-      bmi < 18.5 ? 3 : bmi < 25 ? 6 : bmi < 30 ? 11 : 16;
+                const cat = bmi < 18.5 ? 'Underweight' : (bmi < 25 ? 'Normal' : (bmi < 30 ? 'Overweight' : 'Obese'));
 
-    const metabolicAge =
-      bmi > 27 ? age + 7 : bmi < 18.5 ? age + 2 : age - 5;
+                setR({ ...d, bmi, fat, muscle, skelMuscle, bone, water, bmr, metAge, vFat, cat, refs });
+                
+                try { await fetch(SHEETDB_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ data: [{ date: new Date().toLocaleDateString(), ...d, goal: `BMI: ${bmi}`, type: cat }] }) }); } catch(e) {}
+                setLoading(false);
+            };
 
-    setResult({
-      bmi, bodyFat, fatMass, leanMass,
-      muscleMass, skeletalMuscle,
-      bodyWater, visceralFat, metabolicAge
-    });
-  };
+            const downloadPDF = () => {
+                const input = document.getElementById('pdf-container');
+                input.style.left = "0"; 
+                html2canvas(input, { scale: 2 }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+                    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+                    pdf.save(`SarojFit_Report_${r.name}.pdf`);
+                    input.style.left = "-9999px";
+                });
+            };
 
-  const downloadPDF = async () => {
-    const el = document.getElementById("report");
-    const canvas = await html2canvas(el);
-    const img = canvas.toDataURL("image/png");
-    const pdf = new jspdf.jsPDF();
-    pdf.addImage(img, "PNG", 10, 10, 190, 0);
-    pdf.save("Saroj_Fitness_BMI_Report.pdf");
-  };
+            return (
+                <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-2xl border border-slate-700 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                    <div className="relative z-10 text-center mb-8"><h2 className="text-3xl font-bold mb-2">Smart Health Analysis</h2><p className="text-slate-400">Instant Check & Premium Report</p></div>
+                    <div className="relative z-10 space-y-4">
+                        <div className="grid grid-cols-2 gap-4"><input onChange={e=>setD({...d, name:e.target.value})} placeholder="Name" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /><input onChange={e=>setD({...d, age:e.target.value})} placeholder="Age" type="number" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /></div>
+                        <div className="flex gap-4"><select onChange={e=>setD({...d, gender:e.target.value})} className="w-1/3 bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-400"><option>Male</option><option>Female</option></select><input onChange={e=>setD({...d, phone:e.target.value})} placeholder="Phone" type="number" className="w-2/3 bg-slate-800 p-4 rounded-xl border border-slate-700" /></div>
+                        <div className="grid grid-cols-2 gap-4"><input onChange={e=>setD({...d, weight:e.target.value})} placeholder="Weight (Kg)" type="number" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /><input onChange={e=>setD({...d, height:e.target.value})} placeholder="Height (Cm)" type="number" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /></div>
+                        
+                        <button onClick={calculate} disabled={loading} className="w-full bg-green-600 hover:bg-green-500 py-4 rounded-xl font-bold transition shadow-lg flex justify-center items-center gap-2">{loading ? <div className="loader"></div> : "Check Result"}</button>
 
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="bg-slate-800 rounded-3xl shadow-xl max-w-4xl w-full p-6">
+                        {r && (
+                            <div className="mt-8 flex flex-col items-center bg-slate-800/50 p-6 rounded-2xl fade-in-up">
+                                <div className="relative w-64 h-32 overflow-hidden mb-4"><div className="w-64 h-32 rounded-t-full bg-gradient-to-r from-yellow-400 via-green-500 to-red-500 opacity-90"></div><div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-24 bg-slate-900 rounded-t-full"></div><div className="absolute bottom-0 left-1/2 w-1 h-28 bg-white origin-bottom rounded-full z-20 transition-transform duration-1000 ease-out" style={{ marginLeft: '-2px', transform: `rotate(${angle}deg)` }}></div><div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full z-30"></div></div>
+                                <div className="text-center mb-6"><div className="text-xs text-slate-400 uppercase tracking-widest">Your BMI Score</div><div className="text-5xl font-black text-white mb-2">{r.bmi}</div><div className={`px-6 py-1 rounded-full inline-block font-bold uppercase text-sm ${r.cat==='Normal'?'bg-green-500':'bg-red-500'}`}>{r.cat}</div></div>
+                                <button onClick={downloadPDF} className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold flex justify-center items-center gap-2"><i className="fa-solid fa-file-pdf text-red-600"></i> Download Full Report</button>
+                            </div>
+                        )}
+                    </div>
 
-        <h1 className="text-3xl text-emerald-400 mb-6 text-center">
-          Saroj Fitness & Ayurveda  
-          <div className="text-sm text-gray-400">Machine Grade BMI Analyzer</div>
-        </h1>
+                    {/* --- PDF TEMPLATE --- */}
+                    {r && (
+                        <div id="pdf-container">
+                            <div className="pdf-header"><div className="header-curve-blue"></div><div className="header-curve-purple"></div><div className="absolute top-8 left-10"><div className="text-3xl font-extrabold text-blue-600 tracking-tight">Smart Health Analysis Report</div><div className="w-20 h-1 bg-red-500 mt-2"></div></div><div className="absolute top-8 right-10 text-right"><div className="text-xs text-slate-500">10xPro Analysis</div><img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=SarojFitness" className="mt-2 ml-auto" /></div></div>
+                            <div className="client-strip"><div><h2 className="text-2xl font-bold">{r.name}</h2><p className="text-sm opacity-90">{r.age} Yrs | {r.height} CM | {r.gender}</p></div><div className="text-right"><p className="text-xs opacity-80">Generated On</p><p className="font-bold">{new Date().toLocaleDateString()}</p></div></div>
+                            <div className="text-center mt-6"><p className="text-xs font-bold text-slate-400 mb-2 uppercase">Weight Goals</p><div className="man-row"><i className="fa-solid fa-person man-icon"></i><i className="fa-solid fa-person man-icon"></i><div className="flex flex-col items-center"><i className="fa-solid fa-person man-icon green"></i><span className="text-[10px] font-bold text-green-600 mt-1">Goal</span></div><i className="fa-solid fa-person man-icon"></i><div className="flex flex-col items-center"><i className={`fa-solid fa-person man-icon ${r.bmi>25?'red':'green'}`}></i><span className="text-[10px] font-bold text-slate-600 mt-1">You</span></div><i className="fa-solid fa-person man-icon"></i></div></div>
+                            <div className="flex justify-around px-8 mt-6 mb-6">
+                                <div className="text-center"><div className="star-badge light-green"><div className="mt-4"><div className="text-[9px] uppercase">Body Age</div><div className="text-xl font-bold">{r.metAge}</div><div className="text-[8px]">Yrs</div></div></div></div>
+                                <div className="text-center"><div className="star-badge green"><div className="mt-4"><div className="text-[9px] uppercase">Weight</div><div className="text-xl font-bold">{r.weight}</div><div className="text-[8px]">Kg</div></div></div></div>
+                                <div className="text-center"><div className="star-badge green"><div className="mt-4"><div className="text-[9px] uppercase">BMI</div><div className="text-xl font-bold">{r.bmi}</div></div></div></div>
+                                <div className="text-center"><div className={`star-badge ${r.fat > r.refs.fat.max ? 'red':'green'}`}><div className="mt-4"><div className="text-[9px] uppercase">Fat</div><div className="text-xl font-bold">{r.fat}%</div></div></div></div>
+                            </div>
+                            
+                            <div className="blue-title-bar">Body Composition Analysis</div>
+                            <div className="sub-title">Personalised Summary & Vital Parameters</div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <input name="name" placeholder="Name" onChange={handleChange}
-            className="p-3 rounded bg-slate-700"/>
+                            <div className="grid-container">
+                                <GridItem title="Weight" val={r.weight+" Kg"} range="58.0 - 78.0" status={getStatus(r.weight, 58, 78)} icon="fa-weight-hanging" color="text-blue-500" />
+                                <GridItem title="BMI" val={r.bmi} range={`${r.refs.bmi.min} - ${r.refs.bmi.max}`} status={getStatus(r.bmi, r.refs.bmi.min, r.refs.bmi.max)} icon="fa-ruler-combined" color="text-green-600" />
+                                
+                                <GridItem title="Fat %" val={r.fat+" %"} range={`${r.refs.fat.min} - ${r.refs.fat.max}`} status={getStatus(r.fat, r.refs.fat.min, r.refs.fat.max)} icon="fa-fire" color="text-red-500" />
+                                
+                                <GridItem title="Skeletal Muscle" val={r.skelMuscle+" %"} range="33.4 - 39.3" status={getStatus(r.skelMuscle, 33.4, 39.3)} icon="fa-dumbbell" color="text-orange-500" />
+                                <GridItem title="Muscle Mass" val={r.muscle+" Kg"} range={`${r.refs.muscle.min} - ${r.refs.muscle.max}`} status={getStatus(r.muscle, r.refs.muscle.min, r.refs.muscle.max)} icon="fa-person-walking" color="text-purple-500" />
+                                <GridItem title="Bone Mass" val={r.bone+" Kg"} range={`${r.refs.bone.min} - ${r.refs.bone.max}`} status={getStatus(r.bone, r.refs.bone.min, r.refs.bone.max)} icon="fa-bone" color="text-yellow-600" />
+                                <GridItem title="Hydration" val={r.water+" %"} range={`${r.refs.water.min} - ${r.refs.water.max}`} status={getStatus(r.water, r.refs.water.min, r.refs.water.max)} icon="fa-droplet" color="text-blue-400" />
+                                <GridItem title="Visceral Fat" val={r.vFat} range="1 - 10" status={getStatus(r.vFat, 1, 10)} icon="fa-burger" color="text-amber-700" />
+                                <GridItem title="BMR" val={r.bmr} range="1500+" status={{text:'Normal', class:'ok', icon:'fa-check'}} icon="fa-bolt" color="text-cyan-500" />
+                                <GridItem title="Metabolic Age" val={r.metAge+" Yrs"} range={`< ${r.age}`} status={r.metAge<r.age?{text:'Excellent', class:'ok', icon:'fa-star'}:{text:'High', class:'high', icon:'fa-arrow-up'}} icon="fa-child" color="text-green-500" />
+                            </div>
+                            
+                            <div className="coach-footer"><div className="flex items-center gap-4"><div className="bg-white p-3 rounded-full text-blue-600 text-xl shadow"><i className="fa-solid fa-user-doctor"></i></div><div><h3 className="font-bold text-lg">Saroj Wellness Coach</h3><p className="text-sm">+91-9217225060 | Ludhiana</p></div></div><div><img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://wa.me/919217225060" alt="QR" className="rounded shadow" /></div></div>
+                            <div className="text-center text-[10px] text-slate-400 mt-2 pb-4">Disclaimer: This is an estimated health report based on standard formulas. Not a medical diagnosis.</div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
 
-          <input name="age" placeholder="Age" onChange={handleChange}
-            className="p-3 rounded bg-slate-700"/>
-
-          <select name="gender" onChange={handleChange}
-            className="p-3 rounded bg-slate-700">
-            <option>Male</option>
-            <option>Female</option>
-          </select>
-
-          <input name="weight" placeholder="Weight (kg)" onChange={handleChange}
-            className="p-3 rounded bg-slate-700"/>
-
-          <input name="height" placeholder="Height (cm)" onChange={handleChange}
-            className="p-3 rounded bg-slate-700"/>
-        </div>
-
-        <button onClick={calculate}
-          className="mt-6 w-full bg-emerald-500 hover:bg-emerald-600 p-3 rounded-xl">
-          Generate Report
-        </button>
-
-        {result && (
-          <div id="report" className="mt-8 bg-slate-900 p-6 rounded-xl">
-
-            <h2 className="text-xl mb-4 text-emerald-400">
-              Body Composition Report
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-3 text-sm">
-              <p>BMI: <b>{result.bmi}</b></p>
-              <p>Body Fat %: <b>{result.bodyFat}%</b></p>
-              <p>Fat Mass: <b>{result.fatMass} kg</b></p>
-              <p>Lean Mass: <b>{result.leanMass} kg</b></p>
-              <p>Muscle Mass: <b>{result.muscleMass} kg</b></p>
-              <p>Skeletal Muscle: <b>{result.skeletalMuscle} kg</b></p>
-              <p>Body Water: <b>{result.bodyWater}%</b></p>
-              <p>Visceral Fat Index: <b>{result.visceralFat}</b></p>
-              <p>Metabolic Age: <b>{result.metabolicAge} yrs</b></p>
+        const GridItem = ({ title, val, range, status, icon, color }) => (
+            <div className="grid-item">
+                <div className="flex items-center gap-3">
+                    <div className={`text-2xl w-8 text-center ${color}`}><i className={`fa-solid ${icon}`}></i></div>
+                    <div><div className="font-bold text-sm text-slate-800">{title}</div><div className="text-[10px] text-slate-400">Normal: {range}</div></div>
+                </div>
+                <div className="text-right">
+                    <div className="text-xl font-bold text-slate-900">{val}</div>
+                    <div className={`status-icon ${status.class}`}><i className={`fa-solid ${status.icon} text-xs`}></i><span className="text-[10px] uppercase">{status.text}</span></div>
+                </div>
             </div>
+        );
 
-            <button onClick={downloadPDF}
-              className="mt-4 w-full bg-indigo-500 hover:bg-indigo-600 p-2 rounded">
-              Download PDF Report
-            </button>
+        // --- STORE ---
+        const Store = () => (
+            <section id="store" className="py-24 px-6 bg-emerald-50"><div className="max-w-7xl mx-auto"><h2 className="text-3xl font-bold text-slate-900 mb-8">Ayurvedic Store</h2><div className="flex gap-6 overflow-x-auto scroll-hide pb-8">{supplements.map((item,i)=>(<div key={i} className="min-w-[260px] bg-white rounded-3xl p-6 shadow-sm flex flex-col items-center text-center hover:shadow-xl transition"><div className="text-5xl mb-4">{item.img}</div><h3 className="font-bold text-slate-800">{item.name}</h3><p className="text-xs text-slate-500 mb-4">{item.use}</p><span className="font-bold text-lg block mb-4">{item.price}</span><a href={`https://wa.me/919217225060?text=Buy ${item.name}`} className="bg-slate-900 text-white px-6 py-2 rounded-lg text-sm w-full">Order</a></div>))}</div></div></section>
+        );
 
-          </div>
-        )}
+        // --- PRICING ---
+        const Pricing = () => (
+            <section id="pricing" className="py-24 px-6 bg-white"><div className="max-w-7xl mx-auto text-center"><h2 className="text-3xl font-bold mb-4">Choose Your Plan</h2><div className="grid md:grid-cols-3 gap-8 text-left"><div className="p-8 border rounded-3xl"><h3 className="font-bold text-slate-500 text-sm mb-2">Yoga</h3><div className="text-4xl font-black mb-6">₹999<span className="text-sm font-normal">/mo</span></div><ul className="text-sm space-y-2 mb-6"><li><i className="fa-solid fa-check text-green-500"></i> Daily Live Yoga</li><li><i className="fa-solid fa-check text-green-500"></i> Morning/Evening</li></ul><a href="https://wa.me/919217225060" className="block w-full bg-slate-100 text-center py-3 rounded-xl font-bold">Join</a></div><div className="p-8 bg-slate-900 text-white rounded-3xl transform scale-105 shadow-xl"><h3 className="font-bold text-emerald-400 text-sm mb-2">Weight Loss Pro</h3><div className="text-4xl font-black mb-6">₹2499<span className="text-sm font-normal">/mo</span></div><ul className="text-sm space-y-2 mb-6"><li><i className="fa-solid fa-check text-emerald-400"></i> Custom Diet Chart</li><li><i className="fa-solid fa-check text-emerald-400"></i> Workout Videos</li><li><i className="fa-solid fa-check text-emerald-400"></i> Weekly Check-in</li></ul><a href="https://wa.me/919217225060" className="block w-full bg-emerald-500 text-center py-3 rounded-xl font-bold">Join Now</a></div><div className="p-8 border rounded-3xl"><h3 className="font-bold text-slate-500 text-sm mb-2">Personal</h3><div className="text-4xl font-black mb-6">₹4999<span className="text-sm font-normal">/mo</span></div><ul className="text-sm space-y-2 mb-6"><li><i className="fa-solid fa-check text-green-500"></i> 1-on-1 Training</li><li><i className="fa-solid fa-check text-green-500"></i> Athlete Drills</li></ul><a href="https://wa.me/919217225060" className="block w-full bg-slate-100 text-center py-3 rounded-xl font-bold">Join</a></div></div></div></section>
+        );
 
-      </div>
-    </div>
-  );
-}
+        // --- TESTIMONIALS ---
+        const Testimonials = () => (
+            <section className="py-24 px-6 bg-slate-50"><div className="max-w-6xl mx-auto"><h2 className="text-3xl font-bold text-center mb-12 text-slate-900">Success Stories</h2><div className="grid md:grid-cols-3 gap-8">{testimonials.map((t,i)=>(<div key={i} className="bg-white p-8 rounded-3xl shadow-sm"><div className="text-yellow-400 mb-4"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></div><h4 className="font-bold text-lg mb-2">{t.result}</h4><p className="text-slate-500 text-sm">"{t.text}"</p></div>))}</div></div></section>
+        );
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+        // --- FOOTER ---
+        const Footer = () => (
+            <footer id="contact" className="bg-slate-900 text-white py-12 px-6"><div className="max-w-5xl mx-auto text-center"><h2 className="text-3xl font-bold mb-8">Ready to Transform?</h2><div className="bg-slate-800 p-8 rounded-3xl grid md:grid-cols-2 gap-8 text-left"><a href="tel:9217225060" className="flex items-center gap-4 hover:text-emerald-400"><div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i className="fa-solid fa-phone"></i></div><div><div className="text-xs text-slate-400">Call Me</div><div className="font-bold">+91 92172 25060</div></div></a><a href="mailto:saroj.shila60@gmail.com" className="flex items-center gap-4 hover:text-emerald-400"><div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i className="fa-solid fa-envelope"></i></div><div><div className="text-xs text-slate-400">Email</div><div className="font-bold">saroj.shila60@gmail.com</div></div></a></div><div className="mt-8 text-slate-500 text-sm">&copy; 2026 Saroj Fitness Guide. Designed for Excellence.</div></div></footer>
+        );
 
-</script>
+        const App = () => (
+            <div className="min-h-screen">
+                <Navbar />
+                <Hero />
+                <Services />
+                <section id="planner" className="py-24 px-6 bg-slate-50"><div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start"><div><h2 className="text-3xl font-bold mb-6">Tools</h2><DietPlanner /></div><div className="lg:mt-12"><BMICalculator /></div></div></section>
+                <Store />
+                <Pricing />
+                <Testimonials />
+                <Footer />
+            </div>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
