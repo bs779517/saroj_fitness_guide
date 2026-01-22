@@ -34,19 +34,16 @@
         .header-blob-2 { position: absolute; top: 20px; right: 80px; width: 100px; height: 100px; background: #3B82F6; border-radius: 50%; z-index: 2; }
         .client-bar { background: linear-gradient(90deg, #4F46E5 0%, #3B82F6 100%); color: white; padding: 15px 40px; margin: 20px 40px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Man Icons */
         .man-row { display: flex; justify-content: center; gap: 15px; margin: 20px 0; align-items: flex-end; }
         .man-icon { font-size: 30px; color: #fb923c; } 
         .man-icon.green { color: #22c55e; transform: scale(1.2); }
         .man-icon.red { color: #ef4444; }
 
-        /* Jagged Star Badges */
-        .jagged-badge { width: 90px; height: 90px; background: #22c55e; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; margin: 0 auto; }
-        .jagged-badge.red { background: #ef4444; }
+        .star-badge { width: 90px; height: 90px; background: #22c55e; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold; }
+        .star-badge.green { background: #22c55e; } .star-badge.light-green { background: #84cc16; } .star-badge.red { background: #ef4444; }
         
-        /* Grid */
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 10px 30px; border-top: 3px solid #e2e8f0; margin-top: 20px; }
-        .grid-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dotted #cbd5e1; }
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px 40px; border-top: 4px solid #3b82f6; margin-top: 20px; }
+        .data-card { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px dashed #cbd5e1; }
         
         .status-icon { font-size: 14px; font-weight: bold; display: flex; flex-direction: column; align-items: center; }
         .status-icon.high { color: #ef4444; } 
@@ -54,7 +51,7 @@
         .status-icon.ok { color: #22c55e; } 
         .status-icon.borderline { color: #ef4444; } 
 
-        .coach-footer { background: #FFD700; padding: 15px 30px; margin: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; }
+        .coach-card { background: #FFD700; padding: 15px 30px; margin: 20px 40px; display: flex; align-items: center; justify-content: space-between; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="text-slate-800 antialiased overflow-x-hidden">
@@ -65,7 +62,7 @@
         const { useState, useEffect, useRef } = React;
         const SHEETDB_URL = 'https://sheetdb.io/api/v1/fi4eegqr9v38e';
 
-        // --- DATA & HELPERS ---
+        // --- DATA ---
         const supplements = [
             { name: "Vestige Spirulina", use: "Superfood for Immunity & Energy", price: "₹503", img: "🌿" },
             { name: "Vestige Flax Oil", use: "Omega-3 for Heart & Fat Loss", price: "₹756", img: "❤️" },
@@ -73,6 +70,12 @@
             { name: "Vestige Noni", use: "Metabolism & Detox", price: "₹701", img: "🧬" },
             { name: "Calcium", use: "Strong Bones & Joints", price: "₹314", img: "🦴" },
             { name: "Glucosamine", use: "Relief from Joint Pain", price: "₹1019", img: "🦵" }
+        ];
+
+        const testimonials = [
+            { name: "Priya Sharma", result: "Lost 8kg in 2 Months", text: "Saroj Ma'am ki diet aur yoga ne meri life badal di. Amazing coaching!", star: 5 },
+            { name: "Rahul Verma", result: "Speed & Power", text: "Professional athlete training ke liye best coach hain. Meri sprint speed badh gayi.", star: 5 },
+            { name: "Sunita Devi", result: "Joint Pain Relief", text: "Glucosamine aur Yoga se mere ghutno ka dard gayab ho gaya.", star: 5 }
         ];
 
         const getStatus = (val, min, max) => {
@@ -83,7 +86,7 @@
             return { text: 'Normal', color: 'ok', icon: 'fa-thumbs-up' };
         };
 
-        // --- COMPONENTS ---
+        // --- NAVBAR ---
         const Navbar = () => (
             <nav className="fixed w-full z-50 glass top-0 left-0 border-b border-slate-100">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -98,6 +101,7 @@
             </nav>
         );
 
+        // --- HERO ---
         const Hero = () => (
             <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center bg-slate-900">
                 <div className="absolute inset-0 z-0 opacity-40">
@@ -115,6 +119,7 @@
             </header>
         );
 
+        // --- SERVICES ---
         const Services = () => (
             <section id="services" className="py-24 px-6 bg-white">
                 <div className="max-w-7xl mx-auto text-center">
@@ -128,17 +133,30 @@
             </section>
         );
 
+        // --- DIET PLANNER (UPDATED WITH HEIGHT & DIET TYPE) ---
         const DietPlanner = () => {
             const [step, setStep] = useState(1);
             const [loading, setLoading] = useState(false);
             const [formData, setFormData] = useState({ name: '', phone: '', weight: '', height: '', goal: 'Weight Loss', type: 'Vegetarian' });
             const [plan, setPlan] = useState(null);
             
+            const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
             const generateAndSave = async () => {
-                if(!formData.name || !formData.weight) return alert("Fill details!");
+                if(!formData.name || !formData.weight || !formData.height) return alert("Fill all details!");
                 setLoading(true);
-                let diet = formData.goal === 'Weight Loss' ? { morning: "Warm Water + Lemon", breakfast: "Oats + Spirulina", lunch: "2 Roti + Green Veg", snack: "Green Tea", dinner: "Soup/Salad" } : { morning: "Almonds + Banana", breakfast: "Paneer/Eggs", lunch: "Dal Rice + Roti", snack: "Protein Shake", dinner: "Roti + Sabzi" };
-                try { await fetch(SHEETDB_URL, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({data:[{date: new Date().toLocaleDateString(), ...formData, goal: `Diet: ${formData.goal}`}]}) }); } catch(e){}
+                
+                let diet = {};
+                // Simple Logic for demo
+                if(formData.goal === 'Weight Loss') {
+                    diet = { morning: "Warm Water + Lemon", breakfast: "Oats + Spirulina", lunch: "2 Roti + Green Veg", snack: "Green Tea", dinner: "Soup/Salad" };
+                } else if (formData.goal === 'Muscle Gain') {
+                    diet = { morning: "Almonds + Banana", breakfast: "Paneer/Eggs", lunch: "Dal Rice + Roti", snack: "Protein Shake", dinner: "Roti + Sabzi" };
+                } else {
+                    diet = { morning: "Warm Water", breakfast: "Poha/Idli", lunch: "Roti + Sabzi", snack: "Fruit", dinner: "Light Food" };
+                }
+
+                try { await fetch(SHEETDB_URL, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({data:[{date: new Date().toLocaleDateString(), ...formData, goal: `Diet: ${formData.goal} (${formData.type})`}]}) }); } catch(e){}
                 setPlan(diet); setLoading(false); setStep(2);
             };
 
@@ -148,33 +166,37 @@
                     <div className="text-center mb-8"><h2 className="text-3xl font-bold mt-2">AI Diet Planner 🤖</h2><p className="text-slate-400 text-sm">Generate Plan & Save</p></div>
                     {step === 1 && (
                         <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4"><input onChange={e=>setFormData({...formData, name:e.target.value})} placeholder="Name" className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700" /><input onChange={e=>setFormData({...formData, weight:e.target.value})} placeholder="Weight" className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700" /></div>
-                            <div className="grid grid-cols-2 gap-4"><input onChange={e=>setFormData({...formData, phone:e.target.value})} placeholder="Phone" className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700" /><select onChange={e=>setFormData({...formData, goal:e.target.value})} className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700"><option>Weight Loss</option><option>Muscle Gain</option></select></div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <input name="name" onChange={handleChange} placeholder="Name" className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700" />
+                                <input name="phone" onChange={handleChange} placeholder="Phone" className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700" />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <input name="weight" onChange={handleChange} placeholder="Weight (kg)" type="number" className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700" />
+                                <input name="height" onChange={handleChange} placeholder="Height (cm)" type="number" className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700" />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <select name="goal" onChange={handleChange} className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700 text-slate-400">
+                                    <option value="Weight Loss">Weight Loss</option>
+                                    <option value="Muscle Gain">Muscle Gain</option>
+                                    <option value="Stay Fit">Stay Fit</option>
+                                </select>
+                                <select name="type" onChange={handleChange} className="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700 text-slate-400">
+                                    <option value="Vegetarian">Vegetarian</option>
+                                    <option value="Non-Vegetarian">Non-Vegetarian</option>
+                                    <option value="Vegan">Vegan</option>
+                                </select>
+                            </div>
                             <button onClick={generateAndSave} disabled={loading} className="w-full bg-emerald-500 hover:bg-emerald-600 py-4 rounded-xl font-bold">{loading ? "Loading..." : "Generate Plan"}</button>
                         </div>
                     )}
                     {step === 2 && plan && (
-                        <div className="bg-slate-800 p-6 rounded-2xl"><h3 className="font-bold text-emerald-400 mb-4">🥗 Daily Routine</h3><ul className="space-y-2 text-sm text-slate-300"><li>Morning: {plan.morning}</li><li>Breakfast: {plan.breakfast}</li><li>Lunch: {plan.lunch}</li><li>Dinner: {plan.dinner}</li></ul><button onClick={()=>setStep(1)} className="mt-4 text-xs text-slate-500 w-full">Create New</button></div>
+                        <div className="bg-slate-800 p-6 rounded-2xl"><h3 className="font-bold text-emerald-400 mb-4">🥗 Your {formData.type} Plan</h3><ul className="space-y-2 text-sm text-slate-300"><li>Morning: {plan.morning}</li><li>Breakfast: {plan.breakfast}</li><li>Lunch: {plan.lunch}</li><li>Dinner: {plan.dinner}</li></ul><button onClick={()=>setStep(1)} className="mt-4 text-xs text-slate-500 w-full">Create New</button></div>
                     )}
                 </div>
             );
         };
 
-        // --- GRID ITEM COMPONENT (Defined before BMI Calculator) ---
-        const GridItem = ({ title, val, range, status, icon, color }) => (
-            <div className="grid-item">
-                <div className="flex items-center gap-3">
-                    <div className={`text-2xl w-8 text-center ${color}`}><i className={`fa-solid ${icon}`}></i></div>
-                    <div><div className="font-bold text-sm text-slate-800">{title}</div><div className="text-[10px] text-slate-400">Normal: {range}</div></div>
-                </div>
-                <div className="text-right">
-                    <div className="text-xl font-bold text-slate-900">{val}</div>
-                    <div className={`status-icon ${status.color}`}><i className={`fa-solid ${status.icon} text-xs`}></i><span className="text-[10px] uppercase">{status.text}</span></div>
-                </div>
-            </div>
-        );
-
-        // --- COMPONENT: BMI CALCULATOR (FIXED) ---
+        // --- BMI CALCULATOR ---
         const BMICalculator = () => {
             const [d, setD] = useState({ name: '', phone: '', age: '', gender: 'Male', weight: '', height: '' });
             const [r, setR] = useState(null);
@@ -271,25 +293,121 @@
                                 <GridItem title="Metabolic Age" val={r.metAge+" Yrs"} range={`< ${r.age}`} status={r.metAge<r.age?{text:'Excellent', icon:'fa-star', color:'ok'}:{text:'High', icon:'fa-arrow-up', color:'high'}} icon="fa-child" color="text-green-500" />
                             </div>
                             <div className="coach-footer"><div className="flex items-center gap-4"><div className="bg-white p-3 rounded-full text-blue-600 text-2xl shadow"><i className="fa-solid fa-user-doctor"></i></div><div><h3 className="font-bold text-lg">Saroj Wellness Coach</h3><p className="text-sm">+91-9217225060 | saroj.shila60@gmail.com</p></div></div><div><img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://wa.me/919217225060" alt="QR" className="rounded shadow" /></div></div>
-                            <div className="text-center text-[10px] text-slate-400 mt-2 pb-4">Disclaimer: This is an estimated health report. Not a medical diagnosis.</div>
+                            <div className="text-center text-[10px] text-slate-400 mt-2 pb-4">Disclaimer: This is an estimated health report based on standard formulas. Not a medical diagnosis.</div>
                         </div>
                     )}
                 </div>
             );
         };
 
+        const GridItem = ({ title, val, range, status, icon, color }) => (
+            <div className="grid-item"><div className="flex items-center gap-3"><div className={`text-2xl w-8 text-center ${color}`}><i className={`fa-solid ${icon}`}></i></div><div><div className="font-bold text-sm text-slate-800">{title}</div><div className="text-[10px] text-slate-400">Normal: {range}</div></div></div><div className="text-right"><div className="text-xl font-bold text-slate-900">{val}</div><div className={`status-icon ${status.color}`}><i className={`fa-solid ${status.icon} text-xs`}></i><span className="text-[10px] uppercase">{status.text}</span></div></div></div>
+        );
+
+        // --- STORE ---
         const Store = () => (
             <section id="store" className="py-24 px-6 bg-emerald-50"><div className="max-w-7xl mx-auto"><h2 className="text-3xl font-bold text-slate-900 mb-8">Ayurvedic Store</h2><div className="flex gap-6 overflow-x-auto scroll-hide pb-8">{supplements.map((item,i)=>(<div key={i} className="min-w-[260px] bg-white rounded-3xl p-6 shadow-sm flex flex-col items-center text-center hover:shadow-xl transition"><div className="text-5xl mb-4">{item.img}</div><h3 className="font-bold text-slate-800">{item.name}</h3><p className="text-xs text-slate-500 mb-4">{item.use}</p><span className="font-bold text-lg block mb-4">{item.price}</span><a href={`https://wa.me/919217225060?text=Buy ${item.name}`} className="bg-slate-900 text-white px-6 py-2 rounded-lg text-sm w-full">Order</a></div>))}</div></div></section>
         );
 
+        // --- PRICING (DETAILED) ---
         const Pricing = () => (
-            <section id="pricing" className="py-24 px-6 bg-white"><div className="max-w-7xl mx-auto text-center"><h2 className="text-3xl font-bold mb-12">Plans</h2><div className="grid md:grid-cols-3 gap-8"><div className="p-8 border rounded-3xl"><h3 className="font-bold text-slate-500">Yoga</h3><div className="text-4xl font-black my-4">₹999</div><a href="https://wa.me/919217225060" className="block bg-slate-100 py-3 rounded-xl font-bold">Join</a></div><div className="p-8 bg-slate-900 text-white rounded-3xl transform scale-105 shadow-xl"><h3 className="font-bold text-emerald-400">Weight Loss Pro</h3><div className="text-4xl font-black my-4">₹2499</div><a href="https://wa.me/919217225060" className="block bg-emerald-500 py-3 rounded-xl font-bold">Join Now</a></div><div className="p-8 border rounded-3xl"><h3 className="font-bold text-slate-500">Personal</h3><div className="text-4xl font-black my-4">₹4999</div><a href="https://wa.me/919217225060" className="block bg-slate-100 py-3 rounded-xl font-bold">Join</a></div></div></div></section>
+            <section id="pricing" className="py-24 px-6 bg-white">
+                <div className="max-w-7xl mx-auto text-center">
+                    <h2 className="text-3xl font-bold text-slate-900 mb-4">Choose Your Plan</h2>
+                    <p className="text-slate-500 mb-12">Select the best coaching program for your fitness goals.</p>
+                    <div className="grid md:grid-cols-3 gap-8 text-left">
+                        
+                        {/* Plan 1 */}
+                        <div className="p-8 border border-slate-200 rounded-3xl hover:border-emerald-300 transition">
+                            <h3 className="font-bold text-slate-500 uppercase tracking-widest text-sm mb-2">Yoga & Flexibility</h3>
+                            <div className="text-4xl font-black text-slate-900 mb-6">₹999<span className="text-lg font-medium text-slate-400">/mo</span></div>
+                            <ul className="space-y-3 mb-8 text-sm text-slate-600">
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Daily Live Yoga Sessions (Zoom)</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Morning & Evening Batches</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Joint Pain Solutions</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Basic Diet Guidance</li>
+                            </ul>
+                            <a href="https://wa.me/919217225060?text=I want to join Yoga Classes" className="block w-full text-center bg-slate-100 py-3 rounded-xl font-bold hover:bg-slate-200 transition">Get Started</a>
+                        </div>
+
+                        {/* Plan 2 (Popular) */}
+                        <div className="p-8 bg-slate-900 text-white rounded-3xl shadow-xl relative transform md:-translate-y-4">
+                            <div className="absolute top-0 right-0 bg-emerald-500 text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-2xl uppercase">Popular</div>
+                            <h3 className="font-bold text-emerald-400 uppercase tracking-widest text-sm mb-2">Weight Loss Pro</h3>
+                            <div className="text-4xl font-black mb-6">₹2499<span className="text-lg font-medium text-slate-400">/mo</span></div>
+                            <ul className="space-y-3 mb-8 text-sm text-slate-300">
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> Custom Diet Chart (Veg/Non-Veg)</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> Daily Home Workout Videos</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> Weekly Progress Tracking</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> No Starvation Diet</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-400 mt-1"></i> Supplement Guidance</li>
+                            </ul>
+                            <a href="https://wa.me/919217225060?text=I want to join Weight Loss Pro" className="block w-full text-center bg-gradient-to-r from-emerald-500 to-green-400 py-3 rounded-xl font-bold hover:shadow-lg transition">Start Now</a>
+                        </div>
+
+                        {/* Plan 3 */}
+                        <div className="p-8 border border-slate-200 rounded-3xl hover:border-emerald-300 transition">
+                            <h3 className="font-bold text-slate-500 uppercase tracking-widest text-sm mb-2">Elite / Personal</h3>
+                            <div className="text-4xl font-black text-slate-900 mb-6">₹4999<span className="text-lg font-medium text-slate-400">/mo</span></div>
+                            <ul className="space-y-3 mb-8 text-sm text-slate-600">
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> 1-on-1 Personal Training</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Athlete Speed & Power Drills</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Advanced Nutrition Plan</li>
+                                <li className="flex gap-2"><i className="fa-solid fa-check text-emerald-500 mt-1"></i> Daily Call Support</li>
+                            </ul>
+                            <a href="https://wa.me/919217225060?text=I need Personal Coaching" className="block w-full text-center bg-slate-100 py-3 rounded-xl font-bold hover:bg-slate-200 transition">Apply Now</a>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
         );
 
+        // --- SUCCESS STORIES (TESTIMONIALS) ---
+        const Testimonials = () => (
+            <section className="py-24 px-6 bg-slate-50 border-t border-slate-200">
+                <div className="max-w-6xl mx-auto">
+                    <h2 className="text-3xl font-bold text-center mb-12 text-slate-900">Success Stories</h2>
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {testimonials.map((t, i) => (
+                            <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover-lift transition">
+                                <div className="text-yellow-400 text-sm mb-4">
+                                    {[...Array(t.star)].map((_,s)=><i key={s} className="fa-solid fa-star"></i>)}
+                                </div>
+                                <h4 className="font-bold text-lg mb-2 text-slate-800">{t.result}</h4>
+                                <p className="text-slate-600 italic mb-6 text-sm">"{t.text}"</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700 text-sm">{t.name[0]}</div>
+                                    <span className="font-semibold text-slate-800 text-sm">{t.name}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        // --- FOOTER ---
         const Footer = () => (
-            <footer id="contact" className="bg-slate-900 text-white py-12 px-6"><div className="max-w-5xl mx-auto text-center"><h2 className="text-3xl font-bold mb-8">Ready to Transform?</h2><div className="bg-slate-800 p-8 rounded-3xl grid md:grid-cols-2 gap-8 text-left"><a href="tel:9217225060" className="flex items-center gap-4 hover:text-emerald-400"><div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i className="fa-solid fa-phone"></i></div><div><div className="text-xs text-slate-400">Call Me</div><div className="font-bold">+91 92172 25060</div></div></a><a href="mailto:saroj.shila60@gmail.com" className="flex items-center gap-4 hover:text-emerald-400"><div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i className="fa-solid fa-envelope"></i></div><div><div className="text-xs text-slate-400">Email</div><div className="font-bold">saroj.shila60@gmail.com</div></div></a></div><div className="mt-8 text-slate-500 text-sm">&copy; 2026 Saroj Fitness Guide. Designed for Excellence.</div></div></footer>
+            <footer id="contact" className="bg-slate-900 text-white py-12 px-6">
+                <div className="max-w-5xl mx-auto text-center">
+                    <h2 className="text-3xl font-bold mb-8">Ready to Transform?</h2>
+                    <div className="bg-slate-800 p-8 rounded-3xl grid md:grid-cols-2 gap-8 text-left">
+                        <a href="tel:9217225060" className="flex items-center gap-4 hover:text-emerald-400 transition group">
+                            <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition"><i className="fa-solid fa-phone"></i></div>
+                            <div><div className="text-xs text-slate-400 uppercase tracking-wider">Call Me</div><div className="font-bold text-lg">+91 92172 25060</div></div>
+                        </a>
+                        <a href="mailto:saroj.shila60@gmail.com" className="flex items-center gap-4 hover:text-emerald-400 transition group">
+                            <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition"><i className="fa-solid fa-envelope"></i></div>
+                            <div><div className="text-xs text-slate-400 uppercase tracking-wider">Email</div><div className="font-bold text-lg">saroj.shila60@gmail.com</div></div>
+                        </a>
+                    </div>
+                    <div className="mt-8 text-slate-500 text-sm">&copy; 2026 Saroj Fitness Guide. Designed for Excellence.</div>
+                </div>
+            </footer>
         );
 
+        // --- MAIN APP ---
         const App = () => (
             <div className="min-h-screen">
                 <Navbar />
@@ -298,6 +416,7 @@
                 <section id="planner" className="py-24 px-6 bg-slate-50"><div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start"><div><h2 className="text-3xl font-bold mb-6">Tools</h2><DietPlanner /></div><div className="lg:mt-12"><BMICalculator /></div></div></section>
                 <Store />
                 <Pricing />
+                <Testimonials />
                 <Footer />
             </div>
         );
