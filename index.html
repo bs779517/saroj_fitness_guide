@@ -1,159 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Saroj Fitness & Ayurveda – BMI Analyzer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Saroj Fitness & Ayurveda – BMI & Body Composition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<!-- Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- React -->
-<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans&display=swap" rel="stylesheet">
 
-<!-- Icons + PDF -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans&display=swap" rel="stylesheet">
-
-<style>
-body{font-family:'Open Sans'}
-h1,h2,h3{font-family:'Montserrat'}
-.loader{border:3px solid #eee;border-top:3px solid #10b981;border-radius:50%;width:22px;height:22px;animation:spin 1s linear infinite}
-@keyframes spin{100%{transform:rotate(360deg)}}
-</style>
+  <style>
+    body { font-family: 'Open Sans', sans-serif; }
+    h1,h2,h3 { font-family: 'Montserrat', sans-serif; }
+  </style>
 </head>
 
 <body class="bg-slate-900 text-white">
-<div id="root"></div>
 
-<script type="text/babel">
-const {useState} = React;
+<!-- ================= HEADER ================= -->
+<header class="p-5 text-center bg-slate-800 shadow-xl">
+  <h1 class="text-3xl font-bold text-emerald-400">Saroj Fitness & Ayurveda</h1>
+  <p class="text-slate-300">BMI & Body Composition Analyzer</p>
+</header>
 
-function App(){
+<!-- ================= FORM ================= -->
+<section class="max-w-3xl mx-auto p-6">
+  <div class="bg-slate-800 rounded-3xl p-6 shadow-2xl">
 
-const [d,setD]=useState({name:'',age:'',gender:'Male',weight:'',height:''});
-const [r,setR]=useState(null);
-const [angle,setAngle]=useState(-90);
-const [loading,setLoading]=useState(false);
+    <h2 class="text-xl mb-4 text-emerald-400 font-semibold">Enter Your Details</h2>
 
-const calculate=()=>{
- if(!d.name||!d.age||!d.weight||!d.height){alert("Fill all fields");return;}
- setLoading(true);
+    <div class="grid md:grid-cols-2 gap-4">
+      <input id="name" placeholder="Name" class="p-3 rounded bg-slate-700 w-full">
+      <input id="age" type="number" placeholder="Age" class="p-3 rounded bg-slate-700 w-full">
+      <input id="weight" type="number" placeholder="Weight (kg)" class="p-3 rounded bg-slate-700 w-full">
+      <input id="height" type="number" placeholder="Height (cm)" class="p-3 rounded bg-slate-700 w-full">
 
- const h=d.height/100;
- const bmi=(d.weight/(h*h)).toFixed(1);
- const age=parseInt(d.age);
- const male=d.gender==="Male";
+      <select id="gender" class="p-3 rounded bg-slate-700 w-full">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
 
- // ===== MACHINE-GRADE BIA STYLE LOGIC =====
- let fat=((1.2*bmi)+(0.23*age)-(male?10.8:0)-5.4).toFixed(1);
- if(fat<5) fat=5;
+    <button onclick="calculate()" class="mt-6 w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-3 rounded-xl">
+      Generate Report
+    </button>
+  </div>
+</section>
 
- const muscle=(d.weight*(male?0.42:0.36)).toFixed(1);
- const skeletal=(muscle*0.57).toFixed(1);
- const bone=(d.weight*0.035).toFixed(1);
- const water=(male?58:52);
+<!-- ================= RESULT ================= -->
+<section class="max-w-3xl mx-auto p-6">
+  <div id="result" class="hidden bg-slate-800 rounded-3xl p-6 shadow-2xl space-y-3"></div>
+</section>
 
- let bmr=(10*d.weight)+(6.25*d.height)-(5*age)+(male?5:-161);
- bmr=Math.round(bmr);
+<!-- ================= SCRIPT ================= -->
+<script>
+function calculate() {
+  const name = document.getElementById("name").value;
+  const age = +document.getElementById("age").value;
+  const weight = +document.getElementById("weight").value;
+  const height = +document.getElementById("height").value;
+  const gender = document.getElementById("gender").value;
 
- const visceral=bmi>30?15:bmi>25?9:4;
- const metabolic=bmi>25?age+5:bmi<18.5?age:age-3;
+  if (!name || !age || !weight || !height) {
+    alert("Please fill all fields");
+    return;
+  }
 
- const cat=bmi<18.5?"Underweight":bmi<25?"Normal":bmi<30?"Overweight":"Obese";
+  const heightM = height / 100;
+  const bmi = weight / (heightM * heightM);
 
- let v=bmi<15?15:bmi>40?40:bmi;
- setAngle(-90+((v-15)*(180/25)));
+  const fat = (1.20 * bmi) + (0.23 * age) - (gender === "male" ? 16.2 : 5.4);
+  const muscle = gender === "male" ? weight * 0.42 : weight * 0.36;
+  const skeletal = muscle * 0.57;
+  const bone = weight * 0.035;
+  const water = gender === "male" ? 58 : 52;
 
- setR({bmi,fat,muscle,skeletal,bone,water,bmr,visceral,metabolic,cat});
- setLoading(false);
-};
+  const bmr = gender === "male"
+    ? 10 * weight + 6.25 * height - 5 * age + 5
+    : 10 * weight + 6.25 * height - 5 * age - 161;
 
-const downloadPDF=()=>{
- const el=document.getElementById("report");
- html2canvas(el,{scale:2}).then(c=>{
-  const img=c.toDataURL("image/png");
-  const pdf=new jspdf.jsPDF("p","mm","a4");
-  pdf.addImage(img,"PNG",0,0,210,297);
-  pdf.save(`Saroj_BMI_Report_${d.name}.pdf`);
- });
-};
+  const visceral = bmi > 30 ? 15 : bmi > 25 ? 9 : 4;
+  const metabolicAge = bmi > 25 ? age + 5 : bmi < 18.5 ? age : age - 3;
 
-return(
-<div className="min-h-screen flex items-center justify-center p-6">
-<div className="max-w-xl w-full bg-slate-800 p-8 rounded-3xl shadow-2xl">
+  document.getElementById("result").classList.remove("hidden");
+  document.getElementById("result").innerHTML = `
+    <h3 class="text-2xl text-emerald-400 font-bold">Body Composition Report</h3>
 
-<h1 className="text-3xl font-extrabold text-center mb-6">
-Saroj Fitness & Ayurveda
-</h1>
+    <p><b>Name:</b> ${name}</p>
+    <p><b>BMI:</b> ${bmi.toFixed(1)}</p>
+    <p><b>Body Fat %:</b> ${fat.toFixed(1)}%</p>
+    <p><b>Muscle Mass:</b> ${muscle.toFixed(1)} kg</p>
+    <p><b>Skeletal Muscle:</b> ${skeletal.toFixed(1)} kg</p>
+    <p><b>Bone Mass:</b> ${bone.toFixed(1)} kg</p>
+    <p><b>Body Water:</b> ${water}%</p>
+    <p><b>BMR:</b> ${Math.round(bmr)} kcal</p>
+    <p><b>Visceral Fat Index:</b> ${visceral}</p>
+    <p><b>Metabolic Age:</b> ${metabolicAge} yrs</p>
 
-<div className="grid grid-cols-2 gap-4">
-<input placeholder="Name" className="p-3 rounded bg-slate-700"
-onChange={e=>setD({...d,name:e.target.value})}/>
-<input type="number" placeholder="Age" className="p-3 rounded bg-slate-700"
-onChange={e=>setD({...d,age:e.target.value})}/>
-</div>
-
-<div className="grid grid-cols-2 gap-4 mt-3">
-<select className="p-3 rounded bg-slate-700"
-onChange={e=>setD({...d,gender:e.target.value})}>
-<option>Male</option>
-<option>Female</option>
-</select>
-<input type="number" placeholder="Weight (kg)" className="p-3 rounded bg-slate-700"
-onChange={e=>setD({...d,weight:e.target.value})}/>
-</div>
-
-<input type="number" placeholder="Height (cm)" className="p-3 rounded bg-slate-700 w-full mt-3"
-onChange={e=>setD({...d,height:e.target.value})}/>
-
-<button onClick={calculate}
-className="w-full bg-emerald-500 py-3 rounded-xl font-bold mt-5">
-{loading?<div className="loader mx-auto"></div>:"Check BMI"}
-</button>
-
-{r && (
-<div id="report" className="mt-8 bg-slate-900 p-6 rounded-xl">
-<div className="relative w-64 h-32 mx-auto mb-4 overflow-hidden">
-<div className="w-64 h-32 bg-gradient-to-r from-yellow-400 via-green-500 to-red-500 rounded-t-full"></div>
-<div className="absolute bottom-0 left-1/2 w-1 h-28 bg-white origin-bottom"
-style={{transform:`rotate(${angle}deg)`}}></div>
-</div>
-
-<div className="text-center">
-<div className="text-5xl font-black">{r.bmi}</div>
-<div className={`inline-block px-4 py-1 rounded-full mt-2 ${r.cat==="Normal"?"bg-green-600":"bg-red-600"}`}>
-{r.cat}
-</div>
-</div>
-
-<div className="grid grid-cols-2 gap-3 text-sm mt-6">
-<div>Fat %: <b>{r.fat}</b></div>
-<div>Muscle: <b>{r.muscle} kg</b></div>
-<div>Bone: <b>{r.bone} kg</b></div>
-<div>Water: <b>{r.water}%</b></div>
-<div>BMR: <b>{r.bmr}</b></div>
-<div>Visceral Fat: <b>{r.visceral}</b></div>
-</div>
-
-<button onClick={downloadPDF}
-className="w-full bg-white text-black py-3 rounded-xl font-bold mt-6">
-<i className="fa-solid fa-file-pdf text-red-600"></i> Download PDF
-</button>
-</div>
-)}
-
-</div>
-</div>
-);
+    <div class="mt-4 p-4 bg-slate-700 rounded-xl text-sm text-slate-300">
+      ⚠ This is a wellness estimation based on BIA-style formulas, not a medical diagnosis.
+    </div>
+  `;
 }
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
+
 </body>
 </html>
