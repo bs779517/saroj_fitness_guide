@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Saroj Fitness & Ayurveda Guide</title>
+    <title>Saroj Fitness & Ayurveda Guide - Premium</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,42 +14,254 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Open Sans', sans-serif; background-color: #f8fafc; }
-        h1, h2, h3, h4, .brand-font { font-family: 'Montserrat', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, .brand-font { font-family: 'Sora', sans-serif; }
+        
+        /* PREMIUM ANIMATIONS */
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.8), 0 0 60px rgba(16, 185, 129, 0.4); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        /* GLASS MORPHISM 2.0 */
+        .glass-premium { 
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ANIMATED GRADIENT BACKGROUNDS */
+        .gradient-animate {
+            background: linear-gradient(-45deg, #10b981, #3b82f6, #8b5cf6, #ec4899);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981, #3b82f6, #8b5cf6);
+            background-size: 200% 200%;
+            animation: gradient-shift 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* PREMIUM HOVER EFFECTS */
+        .card-premium {
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+        
+        .card-premium:hover::before {
+            left: 100%;
+        }
+        
+        .card-premium:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* FLOATING ELEMENTS */
+        .float-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* GLOWING BUTTON */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+        
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .btn-glow:hover::after {
+            opacity: 1;
+            animation: spin 2s linear infinite;
+        }
+        
+        /* SCROLL ANIMATIONS */
+        .fade-in-up { 
+            animation: fadeInUp 0.8s ease-out forwards; 
+            opacity: 0; 
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        /* LOADER */
+        .loader { 
+            border: 3px solid rgba(255, 255, 255, 0.3); 
+            border-top: 3px solid #10b981; 
+            border-radius: 50%; 
+            width: 24px; 
+            height: 24px; 
+            animation: spin 1s linear infinite; 
+        }
+        
+        /* HIDE SCROLLBAR */
         .scroll-hide::-webkit-scrollbar { display: none; }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #10b981; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* --- PDF STYLES --- */
-        #pdf-container { position: fixed; left: -9999px; top: 0; width: 210mm; min-height: 297mm; background: white; color: #333; font-family: 'Open Sans', sans-serif; z-index: 10000; }
+        /* PREMIUM NAVBAR */
+        .navbar-premium {
+            background: rgba(15, 12, 41, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* HERO PARTICLES */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 50%);
+            animation: gradient-shift 20s ease infinite;
+        }
+
+        /* --- PDF STYLES (100% 10xPro Match) --- */
+        #pdf-container { position: fixed; left: -9999px; top: 0; width: 210mm; min-height: 297mm; background: white; color: #333; font-family: 'Inter', sans-serif; z-index: 10000; }
+        
         .pdf-header { position: relative; height: 140px; background: white; border-bottom: 3px solid #ef4444; overflow: hidden; }
         .header-curve-blue { position: absolute; top: -80px; right: -50px; width: 280px; height: 280px; background: #3B82F6; border-radius: 50%; z-index: 1; }
         .header-curve-purple { position: absolute; top: 20px; right: 120px; width: 120px; height: 120px; background: #4F46E5; border-radius: 50%; z-index: 2; opacity: 0.9; }
+        
         .client-strip { background: linear-gradient(90deg, #4F46E5, #2563eb); color: white; padding: 15px 40px; margin: 20px 40px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
         .man-row { display: flex; justify-content: center; gap: 15px; margin: 25px 0; align-items: flex-end; }
         .man-icon { font-size: 35px; color: #fb923c; } 
         .man-icon.green { color: #22c55e; transform: scale(1.2); }
         .man-icon.red { color: #ef4444; }
+
         .star-badge { width: 95px; height: 95px; background: #22c55e; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-weight: bold; margin: 0 auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .star-badge.green { background: #22c55e; } .star-badge.light-green { background: #84cc16; } .star-badge.red { background: #ef4444; }
+        
         .blue-title-bar { background: #3B82F6; color: white; padding: 8px 0; text-align: center; font-weight: bold; font-size: 18px; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
         .sub-title { color: #d97706; font-weight: bold; padding: 10px 40px 0 40px; font-size: 14px; text-transform: uppercase; }
+
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 2px solid #e2e8f0; margin: 10px 40px; border-bottom: 2px solid #e2e8f0; }
         .grid-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px dashed #cbd5e1; border-right: 1px dashed #cbd5e1; }
         .grid-item:nth-child(2n) { border-right: none; }
+        
         .status-icon { font-size: 16px; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; }
-        .status-icon.high { color: #ef4444; } .status-icon.low { color: #f59e0b; } .status-icon.ok { color: #22c55e; } .status-icon.borderline { color: #ef4444; }
+        .status-icon.high { color: #ef4444; } 
+        .status-icon.low { color: #f59e0b; } 
+        .status-icon.ok { color: #22c55e; } 
+        .status-icon.borderline { color: #ef4444; }
+
         .coach-footer { background: #FFD700; padding: 15px 30px; margin: 20px 40px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eab308; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+
+        /* LUXURY SHADOWS */
+        .shadow-luxury {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+
+        /* NEON GLOW */
+        .neon-green {
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.8),
+                         0 0 20px rgba(16, 185, 129, 0.6),
+                         0 0 30px rgba(16, 185, 129, 0.4);
+        }
+
+        /* HOLOGRAPHIC EFFECT */
+        .holographic {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            background-size: 200% 200%;
+            animation: gradient-shift 10s ease infinite;
+        }
     </style>
 </head>
-<body class="text-slate-800 antialiased overflow-x-hidden">
+<body class="text-white antialiased">
     
     <div id="root"></div>
 
@@ -57,40 +269,32 @@
         const { useState, useEffect, useRef } = React;
         const SHEETDB_URL = 'https://sheetdb.io/api/v1/fi4eegqr9v38e';
 
-        // --- GENDER BASED REFERENCES ---
-        const REFERENCES = {
-            Male: {
-                fat: { min: 8, max: 20 },
-                muscle: { min: 45, max: 65 }, // Avg range for healthy male
-                bone: { min: 2.5, max: 4.0 },
-                water: { min: 50, max: 65 },
-                bmi: { min: 18.5, max: 24.9 }
-            },
-            Female: {
-                fat: { min: 21, max: 33 }, // Women need more fat
-                muscle: { min: 30, max: 45 }, // Women naturally have less muscle
-                bone: { min: 1.8, max: 3.0 },
-                water: { min: 45, max: 60 },
-                bmi: { min: 18.5, max: 24.9 }
-            }
-        };
-
+        // --- DATA ---
         const supplements = [
-            { name: "Vestige Spirulina", use: "Superfood for Immunity", price: "₹503", img: "🌿" },
-            { name: "Vestige Flax Oil", use: "Omega-3 for Heart", price: "₹756", img: "❤️" },
-            { name: "Veslim Shake", use: "Meal Replacement", price: "₹2327", img: "🥤" },
-            { name: "Vestige Noni", use: "Metabolism & Detox", price: "₹701", img: "🧬" },
-            { name: "Calcium", use: "Strong Bones", price: "₹314", img: "🦴" },
-            { name: "Glucosamine", use: "Joint Pain Relief", price: "₹1019", img: "🦵" }
+            { name: "Vestige Spirulina", use: "Superfood for Immunity & Energy", price: "₹503", img: "🌿", color: "from-green-400 to-emerald-600" },
+            { name: "Vestige Flax Oil", use: "Omega-3 for Heart & Fat Loss", price: "₹756", img: "❤️", color: "from-red-400 to-rose-600" },
+            { name: "Veslim Shake", use: "Tasty Meal Replacement", price: "₹2327", img: "🥤", color: "from-purple-400 to-violet-600" },
+            { name: "Vestige Noni", use: "Metabolism & Detox", price: "₹701", img: "🧬", color: "from-blue-400 to-cyan-600" },
+            { name: "Calcium", use: "Strong Bones & Joints", price: "₹314", img: "🦴", color: "from-yellow-400 to-orange-600" },
+            { name: "Glucosamine", use: "Relief from Joint Pain", price: "₹1019", img: "🦵", color: "from-pink-400 to-rose-600" }
         ];
 
         const testimonials = [
-            { name: "Priya Sharma", result: "Lost 8kg", text: "Saroj Ma'am ki diet aur yoga ne meri life badal di.", star: 5 },
-            { name: "Rahul Verma", result: "Speed Up", text: "Professional athlete training ke liye best coach hain.", star: 5 },
-            { name: "Sunita Devi", result: "Pain Free", text: "Glucosamine aur Yoga se dard gayab ho gaya.", star: 5 }
+            { name: "Priya Sharma", result: "Lost 8kg in 2 Months", text: "Saroj Ma'am ki diet aur yoga ne meri life badal di. Amazing coaching!", star: 5, img: "👩" },
+            { name: "Rahul Verma", result: "Speed & Power Boost", text: "Professional athlete training ke liye best coach hain. Meri sprint speed badh gayi.", star: 5, img: "👨" },
+            { name: "Sunita Devi", result: "Joint Pain Relief", text: "Glucosamine aur Yoga se mere ghutno ka dard gayab ho gaya.", star: 5, img: "👵" }
         ];
 
-        // --- HELPER: STATUS LOGIC ---
+        const services = [
+            { title: "Online Yoga", desc: "Live sessions for flexibility & inner peace", icon: "fa-spa", color: "from-emerald-400 to-green-600", delay: "delay-100" },
+            { title: "Weight Loss", desc: "Home workouts & personalized diet plans", icon: "fa-fire", color: "from-orange-400 to-red-600", delay: "delay-200" },
+            { title: "Diet Charts", desc: "Customized nutrition guidance", icon: "fa-apple-whole", color: "from-rose-400 to-pink-600", delay: "delay-300" },
+            { title: "Athlete Training", desc: "Professional speed & power coaching", icon: "fa-dumbbell", color: "from-blue-400 to-indigo-600", delay: "delay-400" },
+            { title: "Ayurveda Guide", desc: "Authentic supplement recommendations", icon: "fa-leaf", color: "from-lime-400 to-green-600", delay: "delay-500" },
+            { title: "Personal Coaching", desc: "1-on-1 transformation programs", icon: "fa-user-doctor", color: "from-purple-400 to-violet-600", delay: "delay-100" }
+        ];
+
+        // --- HELPERS ---
         const getStatus = (val, min, max) => {
             const v = parseFloat(val);
             if (v > max) return { text: 'High', class: 'high', icon: 'fa-arrow-up' };
@@ -99,42 +303,122 @@
             return { text: 'Normal', class: 'ok', icon: 'fa-thumbs-up' };
         };
 
-        // --- NAVBAR ---
-        const Navbar = () => (
-            <nav className="fixed w-full z-50 glass top-0 left-0 border-b border-slate-100">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                    <div className="text-2xl font-black tracking-tight text-slate-900">SAROJ<span className="text-emerald-600">FIT</span>.</div>
-                    <div className="hidden md:flex space-x-8 font-bold text-slate-600 text-xs uppercase tracking-widest">
-                        <a href="#services" className="hover:text-emerald-600 transition">Services</a>
-                        <a href="#planner" className="hover:text-emerald-600 transition">AI Planner</a>
-                        <a href="#store" className="hover:text-emerald-600 transition">Store</a>
-                    </div>
-                    <a href="#contact" className="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-600 transition shadow-lg">Contact Me</a>
-                </div>
-            </nav>
-        );
+        // --- PREMIUM NAVBAR ---
+        const Navbar = () => {
+            const [scrolled, setScrolled] = useState(false);
+            
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
 
-        // --- HERO ---
+            return (
+                <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'navbar-premium shadow-luxury' : 'bg-transparent'}`}>
+                    <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+                        <div className="text-3xl font-black tracking-tighter gradient-text">
+                            SAROJ<span className="text-white">FIT</span>
+                        </div>
+                        <div className="hidden md:flex space-x-8 font-semibold text-white/80 text-sm uppercase tracking-wider">
+                            <a href="#services" className="hover:text-emerald-400 transition-colors duration-300">Services</a>
+                            <a href="#planner" className="hover:text-emerald-400 transition-colors duration-300">AI Tools</a>
+                            <a href="#store" className="hover:text-emerald-400 transition-colors duration-300">Store</a>
+                            <a href="#pricing" className="hover:text-emerald-400 transition-colors duration-300">Pricing</a>
+                        </div>
+                        <a href="#contact" className="glass-premium px-8 py-3 rounded-full font-bold text-sm hover:bg-emerald-500/20 transition-all duration-300 border border-emerald-500/30 btn-glow">
+                            Contact Me
+                        </a>
+                    </div>
+                </nav>
+            );
+        };
+
+        // --- ULTRA PREMIUM HERO ---
         const Hero = () => (
-            <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center bg-slate-900">
-                <div className="absolute inset-0 z-0 opacity-40"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop" alt="Yoga Background" className="w-full h-full object-cover" /></div>
-                <div className="max-w-7xl mx-auto text-center relative z-10 fade-in-up">
-                    <span className="inline-block py-2 px-5 rounded-full bg-white/10 backdrop-blur-md text-emerald-300 font-bold text-xs uppercase tracking-[0.2em] mb-8 border border-white/20">🏆 Certified Coach</span>
-                    <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 uppercase">Train Like a <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">Champion</span></h1>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <a href="https://wa.me/919217225060" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-emerald-500 text-white px-8 py-4 rounded-full font-bold hover:shadow-xl transition text-sm"><i className="fa-brands fa-whatsapp text-xl"></i> Chat on WhatsApp</a>
-                        <a href="#planner" className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/20 transition text-sm"><i className="fa-solid fa-robot text-xl"></i> Try AI Planner</a>
+            <header className="relative pt-40 pb-32 lg:pt-56 lg:pb-48 px-6 overflow-hidden min-h-screen flex flex-col justify-center">
+                <div className="hero-bg"></div>
+                
+                {/* Floating Elements */}
+                <div className="absolute top-20 left-10 w-20 h-20 bg-emerald-500/20 rounded-full blur-3xl float-element"></div>
+                <div className="absolute bottom-20 right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl float-element" style={{animationDelay: '2s'}}></div>
+                <div className="absolute top-1/2 right-1/4 w-24 h-24 bg-purple-500/20 rounded-full blur-3xl float-element" style={{animationDelay: '4s'}}></div>
+                
+                <div className="max-w-7xl mx-auto text-center relative z-10">
+                    <span className="inline-block py-3 px-6 rounded-full glass-premium text-emerald-300 font-bold text-xs uppercase tracking-[0.25em] mb-10 border border-emerald-500/30 fade-in-up">
+                        🏆 Certified Coach & Ayurveda Expert
+                    </span>
+                    
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight uppercase fade-in-up delay-100">
+                        Train Like a<br/>
+                        <span className="gradient-text neon-green">Champion</span>
+                    </h1>
+                    
+                    <p className="text-lg md:text-xl text-white/70 mb-12 max-w-2xl mx-auto leading-relaxed font-light fade-in-up delay-200">
+                        Transform your body & mind with expert weight loss coaching, authentic yoga sessions & premium Ayurvedic guidance by <span className="text-emerald-400 font-semibold">Saroj</span>
+                    </p>
+                    
+                    <div className="flex flex-col sm:flex-row gap-5 justify-center items-center fade-in-up delay-300">
+                        <a href="https://wa.me/919217225060" className="group w-full sm:w-auto flex items-center justify-center gap-3 gradient-animate text-white px-10 py-5 rounded-full font-bold tracking-wide shadow-luxury hover:scale-105 transition-all duration-300 uppercase text-sm">
+                            <i className="fa-brands fa-whatsapp text-2xl group-hover:rotate-12 transition-transform"></i> 
+                            Chat on WhatsApp
+                        </a>
+                        <a href="#planner" className="group w-full sm:w-auto flex items-center justify-center gap-3 glass-premium text-white border border-white/20 px-10 py-5 rounded-full font-bold tracking-wide hover:bg-white/10 transition-all duration-300 uppercase text-sm">
+                            <i className="fa-solid fa-robot text-2xl group-hover:scale-110 transition-transform"></i> 
+                            Try AI Planner
+                        </a>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-8 mt-20 max-w-3xl mx-auto fade-in-up delay-400">
+                        <div className="glass-premium p-6 rounded-2xl holographic">
+                            <div className="text-4xl font-black gradient-text mb-2">500+</div>
+                            <div className="text-sm text-white/60 uppercase tracking-wider">Happy Clients</div>
+                        </div>
+                        <div className="glass-premium p-6 rounded-2xl holographic">
+                            <div className="text-4xl font-black gradient-text mb-2">10+</div>
+                            <div className="text-sm text-white/60 uppercase tracking-wider">Years Experience</div>
+                        </div>
+                        <div className="glass-premium p-6 rounded-2xl holographic">
+                            <div className="text-4xl font-black gradient-text mb-2">98%</div>
+                            <div className="text-sm text-white/60 uppercase tracking-wider">Success Rate</div>
+                        </div>
                     </div>
                 </div>
             </header>
         );
 
-        // --- SERVICES ---
+        // --- PREMIUM SERVICES ---
         const Services = () => (
-            <section id="services" className="py-24 px-6 bg-white"><div className="max-w-7xl mx-auto text-center"><h2 className="text-3xl font-bold text-slate-900 mb-12">Premium Services</h2><div className="grid md:grid-cols-3 gap-8"><div className="bg-white rounded-3xl p-8 border hover:shadow-xl transition"><div className="text-4xl mb-4 text-emerald-500"><i className="fa-solid fa-spa"></i></div><h3 className="text-xl font-bold mb-2">Online Yoga</h3><p className="text-slate-500">Live sessions for flexibility & peace.</p></div><div className="bg-white rounded-3xl p-8 border hover:shadow-xl transition"><div className="text-4xl mb-4 text-orange-500"><i className="fa-solid fa-fire"></i></div><h3 className="text-xl font-bold mb-2">Weight Loss</h3><p className="text-slate-500">Home workouts & diet plans.</p></div><div className="bg-white rounded-3xl p-8 border hover:shadow-xl transition"><div className="text-4xl mb-4 text-rose-500"><i className="fa-solid fa-apple-whole"></i></div><h3 className="text-xl font-bold mb-2">Diet Charts</h3><p className="text-slate-500">Personalized nutrition advice.</p></div></div></div></section>
+            <section id="services" className="py-32 px-6 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-900/10 to-transparent"></div>
+                
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <div className="text-center mb-20">
+                        <h2 className="text-5xl md:text-6xl font-black mb-6 gradient-text">Premium Services</h2>
+                        <p className="text-white/60 text-lg max-w-2xl mx-auto">
+                            Comprehensive fitness & wellness solutions tailored for your transformation
+                        </p>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {services.map((service, i) => (
+                            <div key={i} className={`card-premium glass-premium rounded-3xl p-8 hover:border-emerald-500/50 transition-all duration-500 ${service.delay} fade-in-up`}>
+                                <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 shadow-luxury`}>
+                                    <i className={`fa-solid ${service.icon} text-3xl text-white`}></i>
+                                </div>
+                                <h3 className="text-2xl font-bold mb-3 text-white">{service.title}</h3>
+                                <p className="text-white/60 leading-relaxed">{service.desc}</p>
+                                <a href="#contact" className="inline-flex items-center gap-2 mt-6 text-emerald-400 font-semibold hover:gap-4 transition-all">
+                                    Learn More <i className="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
         );
 
-        // --- DIET PLANNER ---
+        // --- PREMIUM DIET PLANNER ---
         const DietPlanner = () => {
             const [step, setStep] = useState(1);
             const [loading, setLoading] = useState(false);
@@ -144,53 +428,157 @@
             const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
             const generateAndSave = async () => {
-                if(!formData.name || !formData.weight || !formData.height) return alert("Fill all details!");
+                if(!formData.name || !formData.weight || !formData.height) return alert("Please fill all details!");
                 setLoading(true);
+                
                 let diet = {};
                 if(formData.goal === 'Weight Loss') {
-                    diet = { morning: "Warm Water + Lemon + Honey", breakfast: "Oats + Spirulina", lunch: "2 Roti + Green Veg", snack: "Green Tea", dinner: "Soup/Salad" };
+                    diet = { 
+                        morning: "🌅 Warm Water (1 Glass) + Lemon + 1 Tsp Honey", 
+                        breakfast: formData.type === 'Vegetarian' ? "🥣 Oats Porridge with Water/Skim Milk + 5 Almonds" : "🍳 2 Boiled Egg Whites + 1 Toast + Green Tea", 
+                        lunch: "🍽️ 2 Multigrain Roti + 1 Bowl Seasonal Veg + Fresh Salad", 
+                        snack: "☕ Green Tea + Roasted Makhana (1 Bowl)", 
+                        dinner: "🥗 Boiled Veggies Soup + Papaya (No Carbs after 8 PM)" 
+                    };
                 } else if (formData.goal === 'Muscle Gain') {
-                    diet = { morning: "Banana + Milk", breakfast: "Paneer/Eggs + Toast", lunch: "Rice + Rajma + Roti", snack: "Protein Shake", dinner: "Roti + Chicken/Paneer" };
+                    diet = { 
+                        morning: "💪 Soaked Black Chana + 1 Banana + Milk", 
+                        breakfast: "🥪 Paneer Paratha (Less Oil) / 4 Eggs Omelet + Peanut Butter", 
+                        lunch: "🍚 Rice (1 Bowl) + Rajma/Dal + Roti + Salad + Curd", 
+                        snack: "🥤 Protein Shake / Banana Shake", 
+                        dinner: "🍗 3 Roti + Paneer Bhurji / Chicken Curry + Dal" 
+                    };
                 } else {
-                    diet = { morning: "Warm Water + Almonds", breakfast: "Poha/Upma", lunch: "Roti + Sabzi", snack: "Fruit", dinner: "Khichdi" };
+                    diet = { 
+                        morning: "🌰 Warm Water + 5 Soaked Almonds + 1 Walnut", 
+                        breakfast: "🍲 Poha / Idli / Upma with lots of veggies", 
+                        lunch: "🥘 Roti + Sabzi + Dal + Buttermilk", 
+                        snack: "🍎 Fruit Salad (Apple/Papaya) or Roasted Chana", 
+                        dinner: "🍛 Khichdi or Light Dal Roti" 
+                    };
                 }
+
                 try { await fetch(SHEETDB_URL, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({data:[{date: new Date().toLocaleDateString(), ...formData, goal: `Diet: ${formData.goal} (${formData.type})`}]}) }); } catch(e){}
                 setPlan(diet); setLoading(false); setStep(2);
             };
 
             return (
-                <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-2xl border border-slate-700 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-blue-500"></div>
-                    <div className="text-center mb-8"><h2 className="text-3xl font-bold mt-2">AI Diet Planner 🤖</h2><p className="text-slate-400 text-sm">Detailed Nutrition Plan</p></div>
+                <div className="glass-premium rounded-3xl p-10 shadow-luxury border border-white/10 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-2 gradient-animate"></div>
+                    
+                    <div className="text-center mb-10">
+                        <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-luxury">
+                            <i className="fa-solid fa-robot text-3xl text-white"></i>
+                        </div>
+                        <h2 className="text-4xl font-black gradient-text mb-2">AI Diet Planner</h2>
+                        <p className="text-white/60 text-sm">Personalized nutrition powered by AI</p>
+                    </div>
+                    
                     {step === 1 && (
-                        <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4"><input name="name" onChange={handleChange} placeholder="Name" className="bg-slate-800 p-4 rounded-xl w-full" /><input name="phone" onChange={handleChange} placeholder="Phone" className="bg-slate-800 p-4 rounded-xl w-full" /></div>
-                            <div className="grid grid-cols-2 gap-4"><input name="weight" onChange={handleChange} placeholder="Weight (kg)" type="number" className="bg-slate-800 p-4 rounded-xl w-full" /><input name="height" onChange={handleChange} placeholder="Height (cm)" type="number" className="bg-slate-800 p-4 rounded-xl w-full" /></div>
+                        <div className="space-y-5">
                             <div className="grid grid-cols-2 gap-4">
-                                <select name="goal" onChange={handleChange} className="bg-slate-800 p-4 rounded-xl w-full text-slate-400"><option>Weight Loss</option><option>Muscle Gain</option><option>Stay Fit</option></select>
-                                <select name="type" onChange={handleChange} className="bg-slate-800 p-4 rounded-xl w-full text-slate-400"><option>Vegetarian</option><option>Non-Vegetarian</option><option>Vegan</option></select>
+                                <input 
+                                    name="name" 
+                                    onChange={handleChange} 
+                                    placeholder="Your Name" 
+                                    className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-emerald-500/50 transition-all text-white placeholder-white/40" 
+                                />
+                                <input 
+                                    name="phone" 
+                                    onChange={handleChange} 
+                                    placeholder="Phone Number" 
+                                    className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-emerald-500/50 transition-all text-white placeholder-white/40" 
+                                />
                             </div>
-                            <button onClick={generateAndSave} disabled={loading} className="w-full bg-emerald-500 hover:bg-emerald-600 py-4 rounded-xl font-bold">{loading ? "Generating..." : "Get Detailed Plan"}</button>
+                            <div className="grid grid-cols-2 gap-4">
+                                <input 
+                                    name="weight" 
+                                    onChange={handleChange} 
+                                    placeholder="Weight (kg)" 
+                                    type="number" 
+                                    className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-emerald-500/50 transition-all text-white placeholder-white/40" 
+                                />
+                                <input 
+                                    name="height" 
+                                    onChange={handleChange} 
+                                    placeholder="Height (cm)" 
+                                    type="number" 
+                                    className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-emerald-500/50 transition-all text-white placeholder-white/40" 
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <select 
+                                    name="goal" 
+                                    onChange={handleChange} 
+                                    className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-emerald-500/50 transition-all text-white"
+                                >
+                                    <option value="Weight Loss">Weight Loss</option>
+                                    <option value="Muscle Gain">Muscle Gain</option>
+                                    <option value="Stay Fit">Stay Fit</option>
+                                </select>
+                                <select 
+                                    name="type" 
+                                    onChange={handleChange} 
+                                    className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-emerald-500/50 transition-all text-white"
+                                >
+                                    <option value="Vegetarian">Vegetarian</option>
+                                    <option value="Non-Vegetarian">Non-Vegetarian</option>
+                                    <option value="Vegan">Vegan</option>
+                                </select>
+                            </div>
+                            <button 
+                                onClick={generateAndSave} 
+                                disabled={loading} 
+                                className="w-full gradient-animate py-5 rounded-2xl font-bold text-lg shadow-luxury hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed btn-glow"
+                            >
+                                {loading ? <div className="flex items-center justify-center gap-3"><div className="loader"></div> Generating...</div> : "Get Your Plan"}
+                            </button>
                         </div>
                     )}
+                    
                     {step === 2 && plan && (
-                        <div className="bg-slate-800 p-6 rounded-2xl fade-in-up">
-                            <h3 className="font-bold text-emerald-400 mb-4 border-b border-slate-700 pb-2">🥗 Daily Routine for {formData.name}</h3>
-                            <ul className="space-y-4 text-sm text-slate-300">
-                                <li><span className="text-emerald-500 font-bold uppercase">Morning:</span> {plan.morning}</li>
-                                <li><span className="text-emerald-500 font-bold uppercase">Breakfast:</span> {plan.breakfast}</li>
-                                <li><span className="text-emerald-500 font-bold uppercase">Lunch:</span> {plan.lunch}</li>
-                                <li><span className="text-emerald-500 font-bold uppercase">Snack:</span> {plan.snack}</li>
-                                <li><span className="text-emerald-500 font-bold uppercase">Dinner:</span> {plan.dinner}</li>
+                        <div className="glass-premium bg-white/5 p-8 rounded-3xl fade-in-up border border-emerald-500/30">
+                            <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
+                                <h3 className="text-2xl font-bold gradient-text">Your Daily Plan</h3>
+                                <div className="text-sm text-white/60">For {formData.name}</div>
+                            </div>
+                            
+                            <ul className="space-y-6">
+                                <li className="glass-premium bg-white/5 p-5 rounded-2xl">
+                                    <span className="block text-emerald-400 font-bold text-sm uppercase mb-2">Early Morning</span>
+                                    <span className="text-white/80">{plan.morning}</span>
+                                </li>
+                                <li className="glass-premium bg-white/5 p-5 rounded-2xl">
+                                    <span className="block text-emerald-400 font-bold text-sm uppercase mb-2">Breakfast</span>
+                                    <span className="text-white/80">{plan.breakfast}</span>
+                                </li>
+                                <li className="glass-premium bg-white/5 p-5 rounded-2xl">
+                                    <span className="block text-emerald-400 font-bold text-sm uppercase mb-2">Lunch</span>
+                                    <span className="text-white/80">{plan.lunch}</span>
+                                </li>
+                                <li className="glass-premium bg-white/5 p-5 rounded-2xl">
+                                    <span className="block text-emerald-400 font-bold text-sm uppercase mb-2">Evening Snack</span>
+                                    <span className="text-white/80">{plan.snack}</span>
+                                </li>
+                                <li className="glass-premium bg-white/5 p-5 rounded-2xl">
+                                    <span className="block text-emerald-400 font-bold text-sm uppercase mb-2">Dinner</span>
+                                    <span className="text-white/80">{plan.dinner}</span>
+                                </li>
                             </ul>
-                            <button onClick={()=>setStep(1)} className="mt-6 text-xs text-center w-full text-slate-500">Create New Plan</button>
+                            
+                            <button 
+                                onClick={()=>setStep(1)} 
+                                className="mt-8 w-full py-3 text-sm text-center text-white/60 hover:text-emerald-400 transition-colors border border-white/10 rounded-2xl hover:border-emerald-500/30"
+                            >
+                                Create New Plan
+                            </button>
                         </div>
                     )}
                 </div>
             );
         };
 
-        // --- BMI CALCULATOR (WITH GENDER LOGIC) ---
+        // --- PREMIUM BMI CALCULATOR ---
         const BMICalculator = () => {
             const [d, setD] = useState({ name: '', phone: '', age: '', gender: 'Male', weight: '', height: '' });
             const [r, setR] = useState(null);
@@ -198,46 +586,33 @@
             const [angle, setAngle] = useState(-90);
 
             const calculate = async () => {
-                if(!d.name || !d.weight || !d.height || !d.age) return alert("Fill all details!");
+                if(!d.name || !d.weight || !d.height || !d.age) return alert("Please fill all details!");
                 setLoading(true);
 
                 const h_m = d.height / 100;
-                const w = parseFloat(d.weight);
+                const bmi = (d.weight / (h_m * h_m)).toFixed(1);
                 const age = parseInt(d.age);
                 const isMale = d.gender === 'Male';
                 
-                // Gender specific adjustment
-                const refs = isMale ? REFERENCES.Male : REFERENCES.Female;
-
-                const bmi = (w / (h_m * h_m)).toFixed(1);
-                
-                // Formulas adjusted for gender
-                // Fat Formula (Deurenberg) - uses 10.8 x 1 for male, 0 for female
                 let fat = ((1.20 * bmi) + (0.23 * age) - (isMale ? 10.8 : 0) - 5.4).toFixed(1);
                 if(fat < 5) fat = 5;
 
-                // Muscle Mass Estimation (Crude)
-                const muscleFactor = isMale ? 0.42 : 0.36; // Females generally have less muscle mass %
-                const muscle = (w * muscleFactor).toFixed(2);
-                
-                // Skeletal Muscle (Approx 57% of muscle mass)
+                const muscle = (d.weight * (isMale ? 0.42 : 0.36)).toFixed(2);
                 const skelMuscle = (parseFloat(muscle) * 0.57).toFixed(1);
+                const bone = (d.weight * 0.035).toFixed(2);
+                const water = (isMale ? 58 : 52).toFixed(1);
                 
-                const bone = (w * 0.035).toFixed(2);
-                const water = (isMale ? 58 : 52).toFixed(1); // Standard avg
-                
-                let bmr = (10 * w) + (6.25 * d.height) - (5 * age);
+                let bmr = (10 * d.weight) + (6.25 * d.height) - (5 * age);
                 bmr = (isMale ? bmr + 5 : bmr - 161).toFixed(0);
                 
                 const metAge = bmi > 25 ? age + 5 : (bmi < 18.5 ? age : age - 3);
                 const vFat = (bmi > 30 ? 15 : (bmi > 25 ? 9 : 4));
+                const cat = bmi < 18.5 ? 'Underweight' : (bmi < 25 ? 'Normal' : (bmi < 30 ? 'Overweight' : 'Obese'));
                 
                 let visualBMI = bmi < 15 ? 15 : (bmi > 40 ? 40 : bmi);
                 setAngle(-90 + ((visualBMI - 15) * (180 / 25)));
 
-                const cat = bmi < 18.5 ? 'Underweight' : (bmi < 25 ? 'Normal' : (bmi < 30 ? 'Overweight' : 'Obese'));
-
-                setR({ ...d, bmi, fat, muscle, skelMuscle, bone, water, bmr, metAge, vFat, cat, refs });
+                setR({ ...d, bmi, fat, muscle, skelMuscle, bone, water, bmr, metAge, vFat, cat });
                 
                 try { await fetch(SHEETDB_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ data: [{ date: new Date().toLocaleDateString(), ...d, goal: `BMI: ${bmi}`, type: cat }] }) }); } catch(e) {}
                 setLoading(false);
@@ -256,58 +631,216 @@
             };
 
             return (
-                <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-2xl border border-slate-700 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                    <div className="relative z-10 text-center mb-8"><h2 className="text-3xl font-bold mb-2">Smart Health Analysis</h2><p className="text-slate-400">Instant Check & Premium Report</p></div>
-                    <div className="relative z-10 space-y-4">
-                        <div className="grid grid-cols-2 gap-4"><input onChange={e=>setD({...d, name:e.target.value})} placeholder="Name" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /><input onChange={e=>setD({...d, age:e.target.value})} placeholder="Age" type="number" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /></div>
-                        <div className="flex gap-4"><select onChange={e=>setD({...d, gender:e.target.value})} className="w-1/3 bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-400"><option>Male</option><option>Female</option></select><input onChange={e=>setD({...d, phone:e.target.value})} placeholder="Phone" type="number" className="w-2/3 bg-slate-800 p-4 rounded-xl border border-slate-700" /></div>
-                        <div className="grid grid-cols-2 gap-4"><input onChange={e=>setD({...d, weight:e.target.value})} placeholder="Weight (Kg)" type="number" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /><input onChange={e=>setD({...d, height:e.target.value})} placeholder="Height (Cm)" type="number" className="w-full bg-slate-800 p-4 rounded-xl border border-slate-700" /></div>
+                <div className="glass-premium rounded-3xl p-10 shadow-luxury border border-white/10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                    
+                    <div className="relative z-10 text-center mb-10">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-luxury">
+                            <i className="fa-solid fa-heartbeat text-3xl text-white"></i>
+                        </div>
+                        <h2 className="text-4xl font-black gradient-text mb-2">Health Analysis</h2>
+                        <p className="text-white/60">Complete body composition report</p>
+                    </div>
+                    
+                    <div className="relative z-10 space-y-5">
+                        <div className="grid grid-cols-2 gap-4">
+                            <input 
+                                onChange={e=>setD({...d, name:e.target.value})} 
+                                placeholder="Your Name" 
+                                className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-blue-500/50 transition-all text-white placeholder-white/40" 
+                            />
+                            <input 
+                                onChange={e=>setD({...d, age:e.target.value})} 
+                                placeholder="Age" 
+                                type="number" 
+                                className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-blue-500/50 transition-all text-white placeholder-white/40" 
+                            />
+                        </div>
+                        <div className="flex gap-4">
+                            <select 
+                                onChange={e=>setD({...d, gender:e.target.value})} 
+                                className="w-1/3 glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-blue-500/50 transition-all text-white"
+                            >
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                            <input 
+                                onChange={e=>setD({...d, phone:e.target.value})} 
+                                placeholder="Phone Number" 
+                                type="number" 
+                                className="w-2/3 glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-blue-500/50 transition-all text-white placeholder-white/40" 
+                            />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <input 
+                                onChange={e=>setD({...d, weight:e.target.value})} 
+                                placeholder="Weight (Kg)" 
+                                type="number" 
+                                className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-blue-500/50 transition-all text-white placeholder-white/40" 
+                            />
+                            <input 
+                                onChange={e=>setD({...d, height:e.target.value})} 
+                                placeholder="Height (Cm)" 
+                                type="number" 
+                                className="w-full glass-premium bg-white/5 p-4 rounded-2xl outline-none border border-white/10 focus:border-blue-500/50 transition-all text-white placeholder-white/40" 
+                            />
+                        </div>
                         
-                        <button onClick={calculate} disabled={loading} className="w-full bg-green-600 hover:bg-green-500 py-4 rounded-xl font-bold transition shadow-lg flex justify-center items-center gap-2">{loading ? <div className="loader"></div> : "Check Result"}</button>
+                        <button 
+                            onClick={calculate} 
+                            disabled={loading} 
+                            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 py-5 rounded-2xl font-bold text-lg shadow-luxury hover:scale-105 transition-all duration-300 flex justify-center items-center gap-3 disabled:opacity-50"
+                        >
+                            {loading ? <><div className="loader"></div> Analyzing...</> : <>Check Your Health <i className="fa-solid fa-arrow-right"></i></>}
+                        </button>
 
                         {r && (
-                            <div className="mt-8 flex flex-col items-center bg-slate-800/50 p-6 rounded-2xl fade-in-up">
-                                <div className="relative w-64 h-32 overflow-hidden mb-4"><div className="w-64 h-32 rounded-t-full bg-gradient-to-r from-yellow-400 via-green-500 to-red-500 opacity-90"></div><div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-24 bg-slate-900 rounded-t-full"></div><div className="absolute bottom-0 left-1/2 w-1 h-28 bg-white origin-bottom rounded-full z-20 transition-transform duration-1000 ease-out" style={{ marginLeft: '-2px', transform: `rotate(${angle}deg)` }}></div><div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full z-30"></div></div>
-                                <div className="text-center mb-6"><div className="text-xs text-slate-400 uppercase tracking-widest">Your BMI Score</div><div className="text-5xl font-black text-white mb-2">{r.bmi}</div><div className={`px-6 py-1 rounded-full inline-block font-bold uppercase text-sm ${r.cat==='Normal'?'bg-green-500':'bg-red-500'}`}>{r.cat}</div></div>
-                                <button onClick={downloadPDF} className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold flex justify-center items-center gap-2"><i className="fa-solid fa-file-pdf text-red-600"></i> Download Full Report</button>
+                            <div className="mt-10 flex flex-col items-center fade-in-up glass-premium bg-white/5 p-8 rounded-3xl border border-blue-500/30">
+                                {/* BMI Gauge */}
+                                <div className="relative w-72 h-36 overflow-hidden mb-8">
+                                    <div className="w-72 h-36 rounded-t-full bg-gradient-to-r from-green-400 via-yellow-400 via-orange-400 to-red-500 opacity-90"></div>
+                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-56 h-28 bg-gradient-to-b from-slate-900 to-slate-800 rounded-t-full"></div>
+                                    <div 
+                                        className="absolute bottom-0 left-1/2 w-1 h-32 bg-white origin-bottom rounded-full z-20 transition-transform duration-1000 ease-out shadow-lg" 
+                                        style={{ marginLeft: '-2px', transform: `rotate(${angle}deg)` }}
+                                    ></div>
+                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-5 bg-white rounded-full z-30 shadow-md"></div>
+                                </div>
+                                
+                                <div className="text-center mb-8">
+                                    <div className="text-xs text-white/40 uppercase tracking-widest mb-2">Your BMI Score</div>
+                                    <div className="text-6xl font-black gradient-text mb-4">{r.bmi}</div>
+                                    <div className={`px-8 py-2 rounded-full inline-block font-bold uppercase text-sm ${r.cat==='Normal'?'bg-gradient-to-r from-green-400 to-emerald-600':'bg-gradient-to-r from-red-400 to-rose-600'} shadow-luxury`}>
+                                        {r.cat}
+                                    </div>
+                                </div>
+                                
+                                <button 
+                                    onClick={downloadPDF} 
+                                    className="w-full glass-card text-slate-900 py-4 rounded-2xl font-bold transition-all duration-300 flex justify-center items-center gap-3 hover:scale-105 shadow-luxury"
+                                >
+                                    <i className="fa-solid fa-file-pdf text-red-600 text-xl"></i> 
+                                    Download Full Report
+                                </button>
                             </div>
                         )}
                     </div>
 
-                    {/* --- PDF TEMPLATE --- */}
+                    {/* PDF TEMPLATE */}
                     {r && (
                         <div id="pdf-container">
-                            <div className="pdf-header"><div className="header-curve-blue"></div><div className="header-curve-purple"></div><div className="absolute top-8 left-10"><div className="text-3xl font-extrabold text-blue-600 tracking-tight">Smart Health Analysis Report</div><div className="w-20 h-1 bg-red-500 mt-2"></div></div><div className="absolute top-8 right-10 text-right"><div className="text-xs text-slate-500">10xPro Analysis</div><img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=SarojFitness" className="mt-2 ml-auto" /></div></div>
-                            <div className="client-strip"><div><h2 className="text-2xl font-bold">{r.name}</h2><p className="text-sm opacity-90">{r.age} Yrs | {r.height} CM | {r.gender}</p></div><div className="text-right"><p className="text-xs opacity-80">Generated On</p><p className="font-bold">{new Date().toLocaleDateString()}</p></div></div>
-                            <div className="text-center mt-6"><p className="text-xs font-bold text-slate-400 mb-2 uppercase">Weight Goals</p><div className="man-row"><i className="fa-solid fa-person man-icon"></i><i className="fa-solid fa-person man-icon"></i><div className="flex flex-col items-center"><i className="fa-solid fa-person man-icon green"></i><span className="text-[10px] font-bold text-green-600 mt-1">Goal</span></div><i className="fa-solid fa-person man-icon"></i><div className="flex flex-col items-center"><i className={`fa-solid fa-person man-icon ${r.bmi>25?'red':'green'}`}></i><span className="text-[10px] font-bold text-slate-600 mt-1">You</span></div><i className="fa-solid fa-person man-icon"></i></div></div>
-                            <div className="flex justify-around px-8 mt-6 mb-6">
-                                <div className="text-center"><div className="star-badge light-green"><div className="mt-4"><div className="text-[9px] uppercase">Body Age</div><div className="text-xl font-bold">{r.metAge}</div><div className="text-[8px]">Yrs</div></div></div></div>
-                                <div className="text-center"><div className="star-badge green"><div className="mt-4"><div className="text-[9px] uppercase">Weight</div><div className="text-xl font-bold">{r.weight}</div><div className="text-[8px]">Kg</div></div></div></div>
-                                <div className="text-center"><div className="star-badge green"><div className="mt-4"><div className="text-[9px] uppercase">BMI</div><div className="text-xl font-bold">{r.bmi}</div></div></div></div>
-                                <div className="text-center"><div className={`star-badge ${r.fat > r.refs.fat.max ? 'red':'green'}`}><div className="mt-4"><div className="text-[9px] uppercase">Fat</div><div className="text-xl font-bold">{r.fat}%</div></div></div></div>
+                            <div className="pdf-header">
+                                <div className="header-curve-blue"></div>
+                                <div className="header-curve-purple"></div>
+                                <div className="absolute top-8 left-10">
+                                    <div className="text-3xl font-extrabold text-blue-600 tracking-tight">Smart Health Analysis Report</div>
+                                    <div className="w-20 h-1 bg-red-500 mt-2"></div>
+                                </div>
+                                <div className="absolute top-8 right-10 text-right">
+                                    <div className="text-xs text-slate-500">10xPro Analysis</div>
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=SarojFitness" className="mt-2 ml-auto" />
+                                </div>
                             </div>
                             
+                            <div className="client-strip">
+                                <div>
+                                    <h2 className="text-2xl font-bold">{r.name}</h2>
+                                    <p className="text-sm opacity-90">{r.age} Yrs | {r.height} CM | {r.gender}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-xs opacity-80">Generated On</p>
+                                    <p className="font-bold">{new Date().toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            
+                            <div className="text-center mt-6">
+                                <p className="text-xs font-bold text-slate-400 mb-2 uppercase">Weight Goals</p>
+                                <div className="man-row">
+                                    <i className="fa-solid fa-person man-icon"></i>
+                                    <i className="fa-solid fa-person man-icon"></i>
+                                    <div className="flex flex-col items-center">
+                                        <i className="fa-solid fa-person man-icon green"></i>
+                                        <span className="text-[10px] font-bold text-green-600 mt-1">Goal</span>
+                                    </div>
+                                    <i className="fa-solid fa-person man-icon"></i>
+                                    <div className="flex flex-col items-center">
+                                        <i className={`fa-solid fa-person man-icon ${r.bmi>25?'red':'green'}`}></i>
+                                        <span className="text-[10px] font-bold text-slate-600 mt-1">You</span>
+                                    </div>
+                                    <i className="fa-solid fa-person man-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div className="flex justify-around px-8 mt-6 mb-6">
+                                <div className="text-center">
+                                    <div className="star-badge light-green">
+                                        <div className="mt-4">
+                                            <div className="text-[9px] uppercase">Body Age</div>
+                                            <div className="text-xl font-bold">{r.metAge}</div>
+                                            <div className="text-[8px]">Yrs</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="star-badge green">
+                                        <div className="mt-4">
+                                            <div className="text-[9px] uppercase">Weight</div>
+                                            <div className="text-xl font-bold">{r.weight}</div>
+                                            <div className="text-[8px]">Kg</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="star-badge green">
+                                        <div className="mt-4">
+                                            <div className="text-[9px] uppercase">BMI</div>
+                                            <div className="text-xl font-bold">{r.bmi}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className={`star-badge ${r.fat>20?'red':'green'}`}>
+                                        <div className="mt-4">
+                                            <div className="text-[9px] uppercase">Fat</div>
+                                            <div className="text-xl font-bold">{r.fat}%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="blue-title-bar">Body Composition Analysis</div>
                             <div className="sub-title">Personalised Summary & Vital Parameters</div>
 
                             <div className="grid-container">
                                 <GridItem title="Weight" val={r.weight+" Kg"} range="58.0 - 78.0" status={getStatus(r.weight, 58, 78)} icon="fa-weight-hanging" color="text-blue-500" />
-                                <GridItem title="BMI" val={r.bmi} range={`${r.refs.bmi.min} - ${r.refs.bmi.max}`} status={getStatus(r.bmi, r.refs.bmi.min, r.refs.bmi.max)} icon="fa-ruler-combined" color="text-green-600" />
-                                
-                                <GridItem title="Fat %" val={r.fat+" %"} range={`${r.refs.fat.min} - ${r.refs.fat.max}`} status={getStatus(r.fat, r.refs.fat.min, r.refs.fat.max)} icon="fa-fire" color="text-red-500" />
-                                
+                                <GridItem title="BMI" val={r.bmi} range="18.5 - 24.9" status={getStatus(r.bmi, 18.5, 24.9)} icon="fa-ruler-combined" color="text-green-600" />
+                                <GridItem title="Fat %" val={r.fat+" %"} range="8.0 - 19.0" status={getStatus(r.fat, 8, 19)} icon="fa-fire" color="text-red-500" />
                                 <GridItem title="Skeletal Muscle" val={r.skelMuscle+" %"} range="33.4 - 39.3" status={getStatus(r.skelMuscle, 33.4, 39.3)} icon="fa-dumbbell" color="text-orange-500" />
-                                <GridItem title="Muscle Mass" val={r.muscle+" Kg"} range={`${r.refs.muscle.min} - ${r.refs.muscle.max}`} status={getStatus(r.muscle, r.refs.muscle.min, r.refs.muscle.max)} icon="fa-person-walking" color="text-purple-500" />
-                                <GridItem title="Bone Mass" val={r.bone+" Kg"} range={`${r.refs.bone.min} - ${r.refs.bone.max}`} status={getStatus(r.bone, r.refs.bone.min, r.refs.bone.max)} icon="fa-bone" color="text-yellow-600" />
-                                <GridItem title="Hydration" val={r.water+" %"} range={`${r.refs.water.min} - ${r.refs.water.max}`} status={getStatus(r.water, r.refs.water.min, r.refs.water.max)} icon="fa-droplet" color="text-blue-400" />
+                                <GridItem title="Muscle Mass" val={r.muscle+" Kg"} range="49.4 - 59.4" status={getStatus(r.muscle, 49.4, 59.4)} icon="fa-person-walking" color="text-purple-500" />
+                                <GridItem title="Bone Mass" val={r.bone+" Kg"} range="2.7 - 3.7" status={getStatus(r.bone, 2.7, 3.7)} icon="fa-bone" color="text-yellow-600" />
+                                <GridItem title="Hydration" val={r.water+" %"} range="50.0 - 65.0" status={getStatus(r.water, 50, 65)} icon="fa-droplet" color="text-blue-400" />
                                 <GridItem title="Visceral Fat" val={r.vFat} range="1 - 10" status={getStatus(r.vFat, 1, 10)} icon="fa-burger" color="text-amber-700" />
                                 <GridItem title="BMR" val={r.bmr} range="1500+" status={{text:'Normal', class:'ok', icon:'fa-check'}} icon="fa-bolt" color="text-cyan-500" />
                                 <GridItem title="Metabolic Age" val={r.metAge+" Yrs"} range={`< ${r.age}`} status={r.metAge<r.age?{text:'Excellent', class:'ok', icon:'fa-star'}:{text:'High', class:'high', icon:'fa-arrow-up'}} icon="fa-child" color="text-green-500" />
                             </div>
                             
-                            <div className="coach-footer"><div className="flex items-center gap-4"><div className="bg-white p-3 rounded-full text-blue-600 text-xl shadow"><i className="fa-solid fa-user-doctor"></i></div><div><h3 className="font-bold text-lg">Saroj Wellness Coach</h3><p className="text-sm">+91-9217225060 | Ludhiana</p></div></div><div><img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://wa.me/919217225060" alt="QR" className="rounded shadow" /></div></div>
-                            <div className="text-center text-[10px] text-slate-400 mt-2 pb-4">Disclaimer: This is an estimated health report based on standard formulas. Not a medical diagnosis.</div>
+                            <div className="coach-footer">
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-white p-3 rounded-full text-blue-600 text-2xl shadow">
+                                        <i className="fa-solid fa-user-doctor"></i>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-lg">Saroj Wellness Coach</h3>
+                                        <p className="text-sm">+91-9217225060 | saroj.shila60@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://wa.me/919217225060" alt="QR" className="rounded shadow" />
+                                </div>
+                            </div>
+                            <div className="text-center text-[10px] text-slate-400 mt-2 pb-4">
+                                Disclaimer: This is an estimated health report based on standard formulas. Not a medical diagnosis.
+                            </div>
                         </div>
                     )}
                 </div>
@@ -317,42 +850,258 @@
         const GridItem = ({ title, val, range, status, icon, color }) => (
             <div className="grid-item">
                 <div className="flex items-center gap-3">
-                    <div className={`text-2xl w-8 text-center ${color}`}><i className={`fa-solid ${icon}`}></i></div>
-                    <div><div className="font-bold text-sm text-slate-800">{title}</div><div className="text-[10px] text-slate-400">Normal: {range}</div></div>
+                    <div className={`text-2xl w-8 text-center ${color}`}>
+                        <i className={`fa-solid ${icon}`}></i>
+                    </div>
+                    <div>
+                        <div className="font-bold text-sm text-slate-800">{title}</div>
+                        <div className="text-[10px] text-slate-400">Normal: {range}</div>
+                    </div>
                 </div>
                 <div className="text-right">
                     <div className="text-xl font-bold text-slate-900">{val}</div>
-                    <div className={`status-icon ${status.class}`}><i className={`fa-solid ${status.icon} text-xs`}></i><span className="text-[10px] uppercase">{status.text}</span></div>
+                    <div className={`status-icon ${status.class}`}>
+                        <i className={`fa-solid ${status.icon} text-xs`}></i>
+                        <span className="text-[10px] uppercase">{status.text}</span>
+                    </div>
                 </div>
             </div>
         );
 
-        // --- STORE ---
+        // --- PREMIUM STORE ---
         const Store = () => (
-            <section id="store" className="py-24 px-6 bg-emerald-50"><div className="max-w-7xl mx-auto"><h2 className="text-3xl font-bold text-slate-900 mb-8">Ayurvedic Store</h2><div className="flex gap-6 overflow-x-auto scroll-hide pb-8">{supplements.map((item,i)=>(<div key={i} className="min-w-[260px] bg-white rounded-3xl p-6 shadow-sm flex flex-col items-center text-center hover:shadow-xl transition"><div className="text-5xl mb-4">{item.img}</div><h3 className="font-bold text-slate-800">{item.name}</h3><p className="text-xs text-slate-500 mb-4">{item.use}</p><span className="font-bold text-lg block mb-4">{item.price}</span><a href={`https://wa.me/919217225060?text=Buy ${item.name}`} className="bg-slate-900 text-white px-6 py-2 rounded-lg text-sm w-full">Order</a></div>))}</div></div></section>
+            <section id="store" className="py-32 px-6 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent"></div>
+                
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <div className="text-center mb-20">
+                        <h2 className="text-5xl md:text-6xl font-black mb-6 gradient-text">Ayurvedic Store</h2>
+                        <p className="text-white/60 text-lg max-w-2xl mx-auto">
+                            Premium authentic supplements for holistic wellness
+                        </p>
+                    </div>
+                    
+                    <div className="flex gap-8 overflow-x-auto scroll-hide pb-10">
+                        {supplements.map((item, i) => (
+                            <div key={i} className={`card-premium min-w-[280px] glass-premium rounded-3xl p-8 flex flex-col items-center text-center border border-white/10 delay-${i*100} fade-in-up`}>
+                                <div className={`w-24 h-24 rounded-3xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6 text-5xl shadow-luxury`}>
+                                    {item.img}
+                                </div>
+                                <h3 className="font-bold text-xl text-white mb-3">{item.name}</h3>
+                                <p className="text-sm text-white/60 mb-6 flex-grow">{item.use}</p>
+                                <span className="font-black text-2xl block mb-6 gradient-text">{item.price}</span>
+                                <a 
+                                    href={`https://wa.me/919217225060?text=Buy ${item.name}`} 
+                                    className="bg-gradient-to-r from-emerald-500 to-green-600 text-white px-8 py-3 rounded-full text-sm w-full font-bold hover:scale-105 transition-all shadow-luxury"
+                                >
+                                    Order Now
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
         );
 
-        // --- PRICING ---
+        // --- PREMIUM PRICING ---
         const Pricing = () => (
-            <section id="pricing" className="py-24 px-6 bg-white"><div className="max-w-7xl mx-auto text-center"><h2 className="text-3xl font-bold mb-4">Choose Your Plan</h2><div className="grid md:grid-cols-3 gap-8 text-left"><div className="p-8 border rounded-3xl"><h3 className="font-bold text-slate-500 text-sm mb-2">Yoga</h3><div className="text-4xl font-black mb-6">₹999<span className="text-sm font-normal">/mo</span></div><ul className="text-sm space-y-2 mb-6"><li><i className="fa-solid fa-check text-green-500"></i> Daily Live Yoga</li><li><i className="fa-solid fa-check text-green-500"></i> Morning/Evening</li></ul><a href="https://wa.me/919217225060" className="block w-full bg-slate-100 text-center py-3 rounded-xl font-bold">Join</a></div><div className="p-8 bg-slate-900 text-white rounded-3xl transform scale-105 shadow-xl"><h3 className="font-bold text-emerald-400 text-sm mb-2">Weight Loss Pro</h3><div className="text-4xl font-black mb-6">₹2499<span className="text-sm font-normal">/mo</span></div><ul className="text-sm space-y-2 mb-6"><li><i className="fa-solid fa-check text-emerald-400"></i> Custom Diet Chart</li><li><i className="fa-solid fa-check text-emerald-400"></i> Workout Videos</li><li><i className="fa-solid fa-check text-emerald-400"></i> Weekly Check-in</li></ul><a href="https://wa.me/919217225060" className="block w-full bg-emerald-500 text-center py-3 rounded-xl font-bold">Join Now</a></div><div className="p-8 border rounded-3xl"><h3 className="font-bold text-slate-500 text-sm mb-2">Personal</h3><div className="text-4xl font-black mb-6">₹4999<span className="text-sm font-normal">/mo</span></div><ul className="text-sm space-y-2 mb-6"><li><i className="fa-solid fa-check text-green-500"></i> 1-on-1 Training</li><li><i className="fa-solid fa-check text-green-500"></i> Athlete Drills</li></ul><a href="https://wa.me/919217225060" className="block w-full bg-slate-100 text-center py-3 rounded-xl font-bold">Join</a></div></div></div></section>
+            <section id="pricing" className="py-32 px-6 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-20">
+                        <h2 className="text-5xl md:text-6xl font-black mb-6 gradient-text">Choose Your Plan</h2>
+                        <p className="text-white/60 text-lg">Flexible pricing for every fitness journey</p>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {/* Basic */}
+                        <div className="glass-premium p-10 rounded-3xl border border-white/10 hover:border-emerald-500/50 transition-all duration-500 card-premium">
+                            <div className="text-white/60 font-bold text-sm mb-4 uppercase tracking-wider">Yoga Sessions</div>
+                            <div className="text-5xl font-black mb-2 gradient-text">₹999</div>
+                            <div className="text-white/40 text-sm mb-8">/month</div>
+                            <ul className="space-y-4 mb-10">
+                                <li className="flex items-center gap-3 text-white/80">
+                                    <i className="fa-solid fa-circle-check text-emerald-400"></i> Daily Live Yoga
+                                </li>
+                                <li className="flex items-center gap-3 text-white/80">
+                                    <i className="fa-solid fa-circle-check text-emerald-400"></i> Morning/Evening Slots
+                                </li>
+                                <li className="flex items-center gap-3 text-white/80">
+                                    <i className="fa-solid fa-circle-check text-emerald-400"></i> Group Sessions
+                                </li>
+                            </ul>
+                            <a href="https://wa.me/919217225060" className="block w-full glass-premium bg-white/5 text-center py-4 rounded-2xl font-bold hover:bg-white/10 transition-all">
+                                Get Started
+                            </a>
+                        </div>
+
+                        {/* Pro - FEATURED */}
+                        <div className="glass-premium p-10 rounded-3xl border-2 border-emerald-500/50 transform scale-105 shadow-luxury relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-1 gradient-animate"></div>
+                            <div className="absolute top-4 right-4 bg-gradient-to-r from-emerald-400 to-green-600 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">
+                                Popular
+                            </div>
+                            <div className="text-emerald-400 font-bold text-sm mb-4 uppercase tracking-wider">Weight Loss Pro</div>
+                            <div className="text-5xl font-black mb-2 gradient-text">₹2499</div>
+                            <div className="text-white/40 text-sm mb-8">/month</div>
+                            <ul className="space-y-4 mb-10">
+                                <li className="flex items-center gap-3 text-white">
+                                    <i className="fa-solid fa-circle-check text-emerald-400"></i> Custom Diet Chart
+                                </li>
+                                <li className="flex items-center gap-3 text-white">
+                                    <i className="fa-solid fa-circle-check text-emerald-400"></i> Workout Videos
+                                </li>
+                                <li className="flex items-center gap-3 text-white">
+                                    <i className="fa-solid fa-circle-check text-emerald-400"></i> Weekly Check-in
+                                </li>
+                                <li className="flex items-center gap-3 text-white">
+                                    <i className="fa-solid fa-circle-check text-emerald-400"></i> Progress Tracking
+                                </li>
+                            </ul>
+                            <a href="https://wa.me/919217225060" className="block w-full gradient-animate text-center py-4 rounded-2xl font-bold shadow-luxury hover:scale-105 transition-all">
+                                Join Now
+                            </a>
+                        </div>
+
+                        {/* Premium */}
+                        <div className="glass-premium p-10 rounded-3xl border border-white/10 hover:border-purple-500/50 transition-all duration-500 card-premium">
+                            <div className="text-white/60 font-bold text-sm mb-4 uppercase tracking-wider">Personal Training</div>
+                            <div className="text-5xl font-black mb-2 gradient-text">₹4999</div>
+                            <div className="text-white/40 text-sm mb-8">/month</div>
+                            <ul className="space-y-4 mb-10">
+                                <li className="flex items-center gap-3 text-white/80">
+                                    <i className="fa-solid fa-circle-check text-purple-400"></i> 1-on-1 Training
+                                </li>
+                                <li className="flex items-center gap-3 text-white/80">
+                                    <i className="fa-solid fa-circle-check text-purple-400"></i> Athlete Drills
+                                </li>
+                                <li className="flex items-center gap-3 text-white/80">
+                                    <i className="fa-solid fa-circle-check text-purple-400"></i> Custom Meal Prep
+                                </li>
+                                <li className="flex items-center gap-3 text-white/80">
+                                    <i className="fa-solid fa-circle-check text-purple-400"></i> 24/7 Support
+                                </li>
+                            </ul>
+                            <a href="https://wa.me/919217225060" className="block w-full glass-premium bg-white/5 text-center py-4 rounded-2xl font-bold hover:bg-white/10 transition-all">
+                                Get Started
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
         );
 
-        // --- TESTIMONIALS ---
+        // --- PREMIUM TESTIMONIALS ---
         const Testimonials = () => (
-            <section className="py-24 px-6 bg-slate-50"><div className="max-w-6xl mx-auto"><h2 className="text-3xl font-bold text-center mb-12 text-slate-900">Success Stories</h2><div className="grid md:grid-cols-3 gap-8">{testimonials.map((t,i)=>(<div key={i} className="bg-white p-8 rounded-3xl shadow-sm"><div className="text-yellow-400 mb-4"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></div><h4 className="font-bold text-lg mb-2">{t.result}</h4><p className="text-slate-500 text-sm">"{t.text}"</p></div>))}</div></div></section>
+            <section className="py-32 px-6 relative overflow-hidden">
+                <div className="max-w-6xl mx-auto">
+                    <div className="text-center mb-20">
+                        <h2 className="text-5xl md:text-6xl font-black mb-6 gradient-text">Success Stories</h2>
+                        <p className="text-white/60 text-lg">Real transformations from real people</p>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {testimonials.map((t, i) => (
+                            <div key={i} className={`card-premium glass-premium p-8 rounded-3xl border border-white/10 delay-${i*100} fade-in-up`}>
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-blue-600 flex items-center justify-center text-3xl shadow-luxury">
+                                        {t.img}
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white text-lg">{t.name}</h4>
+                                        <div className="text-yellow-400 text-sm">
+                                            {[...Array(5)].map((_, i) => <i key={i} className="fa-solid fa-star"></i>)}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <span className="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 to-green-600/20 text-emerald-400 text-sm font-bold border border-emerald-500/30">
+                                        {t.result}
+                                    </span>
+                                </div>
+                                <p className="text-white/70 leading-relaxed italic">"{t.text}"</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
         );
 
-        // --- FOOTER ---
+        // --- PREMIUM FOOTER ---
         const Footer = () => (
-            <footer id="contact" className="bg-slate-900 text-white py-12 px-6"><div className="max-w-5xl mx-auto text-center"><h2 className="text-3xl font-bold mb-8">Ready to Transform?</h2><div className="bg-slate-800 p-8 rounded-3xl grid md:grid-cols-2 gap-8 text-left"><a href="tel:9217225060" className="flex items-center gap-4 hover:text-emerald-400"><div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i className="fa-solid fa-phone"></i></div><div><div className="text-xs text-slate-400">Call Me</div><div className="font-bold">+91 92172 25060</div></div></a><a href="mailto:saroj.shila60@gmail.com" className="flex items-center gap-4 hover:text-emerald-400"><div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center"><i className="fa-solid fa-envelope"></i></div><div><div className="text-xs text-slate-400">Email</div><div className="font-bold">saroj.shila60@gmail.com</div></div></a></div><div className="mt-8 text-slate-500 text-sm">&copy; 2026 Saroj Fitness Guide. Designed for Excellence.</div></div></footer>
+            <footer id="contact" className="py-24 px-6 relative overflow-hidden border-t border-white/10">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50"></div>
+                
+                <div className="max-w-5xl mx-auto relative z-10">
+                    <div className="text-center mb-16">
+                        <h2 className="text-5xl md:text-6xl font-black mb-6 gradient-text">Ready to Transform?</h2>
+                        <p className="text-white/60 text-lg">Start your fitness journey today</p>
+                    </div>
+                    
+                    <div className="glass-premium p-10 rounded-3xl grid md:grid-cols-2 gap-8 border border-white/10 mb-12">
+                        <a href="tel:9217225060" className="flex items-center gap-5 hover:scale-105 transition-all group">
+                            <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-600 rounded-2xl flex items-center justify-center shadow-luxury group-hover:rotate-12 transition-transform">
+                                <i className="fa-solid fa-phone text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <div className="text-xs text-white/60 uppercase tracking-wider mb-1">Call Me</div>
+                                <div className="font-bold text-white text-lg">+91 92172 25060</div>
+                            </div>
+                        </a>
+                        
+                        <a href="mailto:saroj.shila60@gmail.com" className="flex items-center gap-5 hover:scale-105 transition-all group">
+                            <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-2xl flex items-center justify-center shadow-luxury group-hover:rotate-12 transition-transform">
+                                <i className="fa-solid fa-envelope text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <div className="text-xs text-white/60 uppercase tracking-wider mb-1">Email</div>
+                                <div className="font-bold text-white text-lg">saroj.shila60@gmail.com</div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div className="text-center">
+                        <div className="text-4xl font-black gradient-text mb-4">SAROJFIT</div>
+                        <p className="text-white/40 text-sm mb-8">Your journey to wellness starts here</p>
+                        <div className="flex justify-center gap-6 mb-8">
+                            <a href="#" className="w-12 h-12 glass-premium rounded-full flex items-center justify-center hover:scale-110 transition-all">
+                                <i className="fa-brands fa-instagram text-xl"></i>
+                            </a>
+                            <a href="#" className="w-12 h-12 glass-premium rounded-full flex items-center justify-center hover:scale-110 transition-all">
+                                <i className="fa-brands fa-facebook text-xl"></i>
+                            </a>
+                            <a href="#" className="w-12 h-12 glass-premium rounded-full flex items-center justify-center hover:scale-110 transition-all">
+                                <i className="fa-brands fa-youtube text-xl"></i>
+                            </a>
+                        </div>
+                        <div className="text-white/30 text-sm">
+                            &copy; 2026 Saroj Fitness Guide. Crafted with <span className="text-red-500">❤️</span> for Excellence
+                        </div>
+                    </div>
+                </div>
+            </footer>
         );
 
+        // --- MAIN APP ---
         const App = () => (
             <div className="min-h-screen">
                 <Navbar />
                 <Hero />
                 <Services />
-                <section id="planner" className="py-24 px-6 bg-slate-50"><div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start"><div><h2 className="text-3xl font-bold mb-6">Tools</h2><DietPlanner /></div><div className="lg:mt-12"><BMICalculator /></div></div></section>
+                
+                <section id="planner" className="py-32 px-6 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/10 to-transparent"></div>
+                    <div className="max-w-7xl mx-auto relative z-10">
+                        <div className="text-center mb-20">
+                            <h2 className="text-5xl md:text-6xl font-black mb-6 gradient-text">AI-Powered Tools</h2>
+                            <p className="text-white/60 text-lg">Advanced calculators for personalized health insights</p>
+                        </div>
+                        <div className="grid lg:grid-cols-2 gap-12 items-start">
+                            <div className="slide-in-left"><DietPlanner /></div>
+                            <div className="slide-in-right delay-200"><BMICalculator /></div>
+                        </div>
+                    </div>
+                </section>
+                
                 <Store />
                 <Pricing />
                 <Testimonials />
